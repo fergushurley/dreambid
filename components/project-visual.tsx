@@ -2,6 +2,7 @@
 import { useState } from "react";
 import type { ProjectSpec, SiteContext } from "@/types";
 import { photorealPreview } from "@/lib/photoreal-preview";
+import { currentConceptImage } from "@/lib/visual-signature";
 import { SitePlan } from "./site-plan";
 
 export type ProjectView = "concept" | "render" | "plan";
@@ -13,13 +14,13 @@ export function ProjectVisual({ project, site, view, renderBusy }: {
   renderBusy: boolean;
 }) {
   const [failedUrl, setFailedUrl] = useState<string | null>(null);
-  const conceptUrl = view === "concept" ? photorealPreview(project) : null;
-  const renderUrl = view !== "plan" ? project?.scene.renderUrl ?? (!project && site.isDemo ? "/demo/before.png" : null) : null;
+  const conceptUrl = view === "concept" ? (currentConceptImage(project) || photorealPreview(project)) : null;
+  const renderUrl = view === "render" ? project?.scene.renderUrl ?? (!project && site.isDemo ? "/demo/before.png" : null) : null;
   const preferredUrl = conceptUrl || renderUrl;
   const imageUrl = preferredUrl !== failedUrl ? preferredUrl : null;
   const showingConcept = !!conceptUrl && imageUrl === conceptUrl;
   const caption = showingConcept
-    ? "Photoreal AI concept · illustrative"
+    ? `AI concept · ${project?.conceptVisual?.source === "live" ? "current layout reference" : "retained reference"} · illustrative`
     : view === "plan" ? "Site plan · preliminary geometry"
     : renderBusy ? "Preparing the exact 3D layout…"
     : project && imageUrl ? `${project.scene.renderer === "blender" ? "Blender visualization" : "Fallback visualization"} · revision ${project.version}`
@@ -31,10 +32,11 @@ export function ProjectVisual({ project, site, view, renderBusy }: {
       className="scene-image"
       src={imageUrl}
       alt={showingConcept
-        ? `Photorealistic AI concept of ${project?.title}: ${project?.elements.some(e => e.kind === "kitchen") ? "outdoor kitchen and dining" : "cedar pergola and dining"}, with the mature oak retained. Illustrative visualization, not a photograph of a built project.`
+        ? `AI concept of ${project?.title}. Illustrative design grounded in the selected plan; not a current-property photo. Refer to the site plan for dimensions.`
         : project ? `Project visualization for revision ${project.version}` : "Illustrative Blender backyard before renovation"}
       onError={() => setFailedUrl(imageUrl)}
     /> : <SitePlan project={project} site={site}/>}
+    {view === "concept" && project && !imageUrl && <div className="concept-empty"><strong>Your layout is ready to imagine.</strong><span>Generate an AI concept to explore materials and atmosphere.</span></div>}
     <div className="scene-caption"><span><span className="tiny-dot"/>{caption}</span><span>{site.yardDimensions.widthFt} × {site.yardDimensions.depthFt} FT</span></div>
   </div>;
 }

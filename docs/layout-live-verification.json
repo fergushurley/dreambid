@@ -1,0 +1,117 @@
+{
+  "verifiedAt": "2026-09-10T18:44:09.010Z",
+  "layout": {
+    "meta": {
+      "mode": "live",
+      "model": "gpt-6-astra",
+      "reason": null,
+      "responseId": "resp_0b2bbed7befafa29016aa2f96ed5f887d2902a5e615e1427cd",
+      "durationMs": 10464
+    },
+    "before": {
+      "range": {
+        "low": 118330,
+        "high": 178740
+      },
+      "planningTotal": 148525,
+      "target": 67500,
+      "maximum": 75000,
+      "status": "over",
+      "overBy": 73525
+    },
+    "after": {
+      "range": {
+        "low": 42910,
+        "high": 70060
+      },
+      "planningTotal": 56480,
+      "target": 67500,
+      "maximum": 75000,
+      "status": "within",
+      "overBy": 0
+    },
+    "patch": {
+      "summary": "Keep the mature oak and use the supplied budget-fit candidate: a smaller terrace and kitchen, fabric shade, and a spa instead of the pool. The indicative upper planning range fits the $75,000 cap.",
+      "operations": [
+        {
+          "action": "update",
+          "elementId": "patio",
+          "position": null,
+          "dimensions": {
+            "widthFt": 18,
+            "depthFt": 14
+          }
+        },
+        {
+          "action": "update",
+          "elementId": "lights",
+          "position": null,
+          "dimensions": {
+            "widthFt": 12,
+            "depthFt": 12
+          }
+        },
+        {
+          "action": "update",
+          "elementId": "planting",
+          "position": {
+            "x": 6,
+            "y": 37
+          },
+          "dimensions": {
+            "widthFt": 8,
+            "depthFt": 2
+          }
+        },
+        {
+          "action": "update",
+          "elementId": "kitchen-597dbe95",
+          "position": null,
+          "dimensions": {
+            "widthFt": 8,
+            "depthFt": 3
+          }
+        },
+        {
+          "action": "replace",
+          "elementId": "pergola",
+          "catalogItemId": "shade_sail",
+          "position": {
+            "x": 5,
+            "y": 10
+          },
+          "dimensions": {
+            "widthFt": 12,
+            "depthFt": 12
+          }
+        },
+        {
+          "action": "replace",
+          "elementId": "pool-3d32bbd9",
+          "catalogItemId": "spa",
+          "position": {
+            "x": 5,
+            "y": 30
+          },
+          "dimensions": {
+            "widthFt": 7,
+            "depthFt": 7
+          }
+        }
+      ]
+    },
+    "quoteMeta": {
+      "mode": "live",
+      "model": "gpt-6-astra",
+      "reason": null,
+      "responseId": "resp_07fc52e49facf5db016aa2f978a42887d28fbc0321ad896e29",
+      "durationMs": 22782
+    }
+  },
+  "visual": {
+    "mode": "live",
+    "model": "gpt-image-2",
+    "renderer": "blender",
+    "disclaimer": "AI concept visualization, grounded in the current plan. Materials and spatial details may differ; use the site plan for dimensions. Not a current-property photograph or construction drawing."
+  }
+}

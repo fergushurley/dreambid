@@ -25,6 +25,9 @@ npm test
 npm run smoke:astra
 npm run smoke:blender
 npm run smoke:flow
+npm run smoke:layout
+# Optional paid layout, quote and photoreal image verification:
+npm run smoke:layout -- --live --visual
 # Optional paid end-to-end API verification, including an illustrative image:
 npm run smoke:flow -- --live --vision
 ```
@@ -55,7 +58,7 @@ ProjectBrief + photos + SiteContext (facts with provenance)
 
 The shared TypeScript/Zod schemas live in `types/index.ts`. Fixtures are in `fixtures/`. All credentials remain server-side. No arbitrary model-generated code is executed. No database, authentication, or real contractor outreach is included. A project and its source context are saved in the current browser's local storage; uploaded photos are excluded. You can download the JSON and an actionable Markdown bid package.
 
-The API routes are `/api/concepts`, `/api/project`, `/api/revise`, `/api/quotes`, and `/api/render`. Astra returns validated structured data. Code checks protected elements, budgets, geometry and stable scope references; quote arithmetic is independently calculated and reconciled with the model's scope audit. Model failures are surfaced as labeled fallback or an error that leaves the existing project intact.
+The API routes are `/api/concepts`, `/api/project`, `/api/revise`, `/api/quotes`, `/api/render`, `/api/layout`, and `/api/visualize`. Astra returns validated structured data. Code checks protected elements, budgets, geometry and stable scope references; quote arithmetic is independently calculated and reconciled with the model's scope audit. Model failures are surfaced as labeled fallback or an error that leaves the existing project intact.
 
 ## Blender
 
@@ -67,11 +70,11 @@ Install Blender, then set `BLENDER_PATH` in `.env.local`. Standard macOS path:
 
 `npm run smoke:blender` runs a deterministic scene test. `npm run render:fixtures` rebuilds the retained before/three-concept/kitchen PNGs using `blender/render.py`. The renderer creates the yard, house context, patio, tree, dining, pergola, planting, kitchen and lighting from ProjectSpec; renders a PNG; and saves a `.blend` file. Runtime assets are cached by a hash of geometry and renderer version in ignored `public/generated/`. Blender failure or timeout produces a labeled SVG fallback plan. Tested with Blender 5.2.1 LTS.
 
-The **Concept** view can display separately generated illustrative photoreal assets for matching canonical geometry. **3D view** displays the current deterministic Blender result. **Site plan** shows structured footprints and the tree protection zone. Photoreal concepts are neither real property photographs nor live Blender renders; see [asset provenance and prompts](docs/PHOTOREAL_PREVIEWS.md).
+The **Concept** view displays retained photoreal references for matching fixture geometry and supports paid **Regenerate concept** requests with `OPENAI_IMAGE_MODEL` (default `gpt-image-2`). Current Blender geometry, SiteContext, constraints and optional photos ground each generated image. Layout changes invalidate old imagery. **3D view** displays the current deterministic Blender result. **Site plan** shows structured footprints and the tree protection zone. Photoreal concepts are neither real property photographs nor live Blender renders; see [asset provenance and prompts](docs/PHOTOREAL_PREVIEWS.md).
 
 ## Interactive planning
 
-Select a design and open **Customize layout** to browse 31 backyard features, drag or resize their footprints, edit dimensions, and see indicative ranges and preliminary warnings update in the same ProjectSpec. Current property context appears before generation; custom addresses do not inherit the demo’s facts. Pricing remains curated and preliminary. See the [interactive planning guide](docs/LAYOUT.md) for the $75K demo, price formulas and milestone scope.
+Select a design and open **Customize layout** to browse 31 backyard features, drag footprints, resize from their edge handles, remove with the corner ×, edit dimensions, and see indicative ranges and preliminary warnings update in the same ProjectSpec. Ask Astra to change the plan, review its typed proposal and tradeoffs, then apply it. Budget substitutions change scope and sizes; deterministic code calculates costs. Current property context appears before generation; custom addresses do not inherit the demo’s facts. Pricing remains curated and preliminary. See the [interactive planning guide](docs/LAYOUT.md) for the $75K demo, price formulas and milestone scope.
 
 ## Canonical demo
 

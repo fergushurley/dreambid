@@ -36,3 +36,14 @@ Lighting: warm late-afternoon sunlight with realistic soft shadows, subtly glowi
 Materials: textured pale limestone pavers with subtle joints, natural cedar wood grain, real teak furniture with light linen cushions, individual grass blades, a mature oak with detailed bark and natural leaf canopy, low native planting along the specified strip, warm off-white stucco house and fence.
 Constraints: do not add a pool, fire pit, lounge, people, extra structures, or extra furniture. Keep existing major elements and relationships. No text, dimensions, labels, logos, borders, or watermark. Landscape 4:3 image. This is an illustrative concept visualization, so make it look photographic without adding new scope.
 ```
+
+
+## Live grounded regeneration — September 10 continuation
+
+The app now supports `/api/visualize`: a deterministic Blender PNG is image 1, followed by optional homeowner photos, with the ProjectSpec geometry, current scope, hard constraints and full SiteContext provenance included in the prompt. `gpt-image-2` generates a 1536×1024 medium-quality image. The prompt lives in `lib/concept-visual.ts`; `scripts/render-concepts.ts` reproduces the retained meadow and retreat references (paid API access and running local server required). Their models, timestamps and geometry are recorded in the fixture manifest.
+
+The initial live image request exposed `invalid_input_fidelity_model`; removing that unsupported parameter resolved it. Three live generated images were visually inspected: a customized entertaining plan with a spa, sail, kitchen and putting green, and the two additional canonical concept references. Realistic materials and lighting materially improve the presentation, but images can interpret or embellish details. The site plan controls exact dimensions; imagery never establishes property facts or permits.
+
+Image output is cached by input content. The ProjectSpec carries a geometry/constraint signature, and layout/revision changes invalidate the image. Stale asynchronous results cannot overwrite a different design. In demo mode only matching references/caches are used; unavailable generation leaves the site plan working with an explicit explanation.
+
+Official API reference: https://developers.openai.com/api/docs/guides/image-generation

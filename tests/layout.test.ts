@@ -59,3 +59,34 @@ test("manual layout invalidates a matching concept image and custom addresses ha
 test("strict Astra schemas exclude optional deterministic pricing metadata", () => {
  for (const [name,schema] of [["project",projectDraftSchema],["revision",revisionPatchSchema],["layout",layoutPatchSchema]] as const) assert.doesNotThrow(()=>zodTextFormat(schema,name));
 });
+
+test("budget advice fits the expanded $75K demo with real substitutions and preserved tree", async () => {
+ const {budgetFitPatch}=await import("../lib/layout-assistant");
+ const brief={...canonicalBrief,budget:75000};
+ let p=fixtureProject(brief,fallbackConcepts(brief).concepts[1],canonicalSiteContext);
+ p=add(add(add(p,"pool"),"putting_green"),"kitchen");
+ const patch=budgetFitPatch(p,canonicalSiteContext,75000);
+ const fitted=applyLayoutPatch(p,patch,canonicalSiteContext);
+ assert.ok(budgetSummary(fitted).range.high<=75000,JSON.stringify(budgetSummary(fitted)));
+ assert.deepEqual(fitted.elements.find(e=>e.kind==="tree"),p.elements.find(e=>e.kind==="tree"));
+ assert.ok(!fitted.elements.some(e=>e.kind==="pool"));
+ assert.ok(fitted.elements.some(e=>e.kind==="kitchen"));
+ assert.equal(fitted.feasibility.conflicts.filter(c=>!c.resolved).length,0,JSON.stringify(fitted.feasibility.conflicts));
+ assert.equal(normalizeQuotes(fitted,syntheticQuotes(fitted)).length,3);
+});
+
+test("regenerated concept is tied to geometry and constraints, not a stale image", async () => {
+ const {visualSignature,currentConceptImage}=await import("../lib/visual-signature");
+ const p=base();p.conceptVisual={imageUrl:"/generated/test.png",specSignature:visualSignature(p),model:"gpt-image-2",createdAt:"2026-09-10",source:"live",disclaimer:"Illustrative"};
+ assert.equal(currentConceptImage(p),"/generated/test.png");
+ assert.equal(currentConceptImage({...p,budgetMaximum:40000}),null);
+ const changed=applyLayoutPatch(p,{summary:"Resize patio",operations:[{action:"update",elementId:"patio",position:null,dimensions:{widthFt:18,depthFt:14}}]},canonicalSiteContext);
+ assert.equal(changed.conceptVisual,undefined);assert.equal(currentConceptImage(changed),null);
+ const noop=applyLayoutPatch(p,{summary:"Already fits",operations:[]},canonicalSiteContext);assert.equal(noop.version,p.version);assert.equal(currentConceptImage(noop),"/generated/test.png");
+});
+test("budget advice never invents price discounts to satisfy an impossible cap", async () => {
+ const {budgetFitPatch,layoutAdviceSchema}=await import("../lib/layout-assistant");
+ const p=base(),snapshot=JSON.stringify(p);
+ assert.throws(()=>budgetFitPatch(p,canonicalSiteContext,5000),/exceed/);assert.equal(JSON.stringify(p),snapshot);
+ assert.doesNotThrow(()=>zodTextFormat(layoutAdviceSchema,"layout_advice"));
+});

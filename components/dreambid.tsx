@@ -6,6 +6,7 @@ import { canonicalBrief, REVISION_PROMPT } from "@/fixtures/project";
 import { canonicalSiteContext, DEMO_ADDRESS, siteForAddress } from "@/fixtures/site-context";
 import { ProjectVisual, type ProjectView } from "./project-visual";
 import { photorealPreview } from "@/lib/photoreal-preview";
+import { currentConceptImage, visualSignature } from "@/lib/visual-signature";
 import { QuoteComparison } from "./quote-comparison";
 import { bidPackageMarkdown } from "@/lib/bid-package";
 import { BrandMark } from "./brand-mark";
@@ -17,8 +18,8 @@ const dollars = (value: number) => new Intl.NumberFormat("en-US", { style: "curr
 type Stage = "brief" | "concepts" | "design" | "quotes" | "editor";
 type SavedProject = { project: ProjectSpec; site: SiteContext; brief: ProjectBrief; meta: EngineMeta | null };
 
-async function post<T>(path: string, payload: unknown): Promise<T> {
-  const response = await fetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload), signal: AbortSignal.timeout(90000) });
+async function post<T>(path: string, payload: unknown, timeout = 90000): Promise<T> {
+  const response = await fetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload), signal: AbortSignal.timeout(timeout) });
   const result = await response.json();
   if (!response.ok) throw new Error(result.error || "Something went wrong. Your current project has been kept.");
   return result as T;
@@ -40,11 +41,12 @@ export function DreamBid() {
   const [saved, setSaved] = useState<SavedProject | null>(null);
   const [quotes, setQuotes] = useState<ContractorQuote[]>([]);
   const [recommendation, setRecommendation] = useState<QuoteRecommendation | null>(null);
+  const [visualNote, setVisualNote] = useState("");
   const [renderBusy, setRenderBusy] = useState(false);
   const upload = useRef<HTMLInputElement>(null);
   const activeProject = useRef<ProjectSpec | null>(null);
   useEffect(() => { activeProject.current = project; }, [project]);
-  useEffect(() => { setView("concept"); }, [project?.id, project?.version]);
+  useEffect(() => { setView("concept"); setVisualNote(""); }, [project?.id, project?.version]);
   useEffect(() => {
     try { const value = localStorage.getItem("dreambid-project-v1"); if (value) setSaved(JSON.parse(value)); } catch { /* Storage may be disabled. */ }
   }, []);
@@ -82,9 +84,20 @@ export function DreamBid() {
   async function revise() {
     if (!project) return;
     await run("Revising the scope and checking what stays…", async () => {
-      const result = await post<{ data: ProjectSpec; site: SiteContext; meta: EngineMeta }>("/api/revise", { project, instruction: revision, demoMode });
+      const result = await post<{ data: ProjectSpec; site: SiteContext; meta: EngineMeta }>(project.elements.some(e => e.pricing || e.catalogItemId) ? "/api/layout" : "/api/revise", { project, instruction: revision, demoMode });
       setProject(result.data); setSite(result.site); setMeta(result.meta); setRevision(""); setQuotes([]); setRecommendation(null); setView("concept");
       void renderProject(result.data);
+    });
+  }
+  async function regenerateConcept() {
+    if (!project) return;
+    const original = project, signature = visualSignature(project);
+    await run("Creating your AI concept from the current layout…", async () => {
+      setVisualNote("");
+      const result = await post<{visual: ProjectSpec["conceptVisual"] | null; scene: ProjectSpec["scene"]; mode: string; reason: string | null}>("/api/visualize", {project: original, photos: brief.photos, demoMode}, 240000);
+      if (!activeProject.current || activeProject.current.id !== original.id || visualSignature(activeProject.current) !== signature) { setVisualNote("Your layout changed during generation. Generate again for the latest plan."); return; }
+      setProject(current => current?.id === original.id && visualSignature(current) === signature ? {...current, scene: result.scene, ...(result.visual ? {conceptVisual: result.visual} : {})} : current);
+      setVisualNote(result.reason || (result.mode === "cached" ? "Previously generated for this exact input." : "Generated from this layout and your constraints. Visual details may vary; the site plan controls dimensions.")); setView("concept");
     });
   }
   async function getQuotes() {
@@ -113,7 +126,7 @@ export function DreamBid() {
   function goHome() {
     if (busy) return;
     if (project) setSaved({ project, site, brief: { ...brief, photos: [] }, meta });
-    setProject(null); setStage("brief"); setSite(canonicalSiteContext); setBrief(canonicalBrief);
+    setVisualNote(""); setProject(null); setStage("brief"); setSite(canonicalSiteContext); setBrief(canonicalBrief);
     setMeta(null); setError(""); setRevision(""); setQuotes([]); setRecommendation(null);
     window.scrollTo({ top: 0, behavior: "instant" });
   }
@@ -127,7 +140,7 @@ export function DreamBid() {
     const url = URL.createObjectURL(new Blob([bidPackageMarkdown(project, site)], { type: "text/markdown" }));
     const a = document.createElement("a"); a.href = url; a.download = `dreambid-bid-package-v${project.version}.md`; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
-  const conceptPreview = photorealPreview(project);
+  const conceptPreview = currentConceptImage(project) || photorealPreview(project);
   const phase = stage === "brief" ? 0 : stage === "concepts" ? 1 : (stage === "design" || stage === "editor") ? 2 : 3;
   const title = stage === "brief" ? "Every possibility starts at home." : stage === "editor" ? "Make space for your life." : stage === "concepts" ? "Three ways to make it yours." : stage === "quotes" ? "The price is only the beginning." : project?.title || "Your gathering garden.";
 
@@ -141,8 +154,9 @@ export function DreamBid() {
       {stage !== "quotes" && stage !== "editor" && <>
       <section className={`design-workspace ${stage === "concepts" ? "concept-context" : ""}`}>
         <div className="visual-panel">
-          <div className={`visual-toolbar ${conceptPreview ? "has-photoreal" : ""}`}><span className="property-label"><MapPin size={13}/>{site.isDemo ? "24 Maple Lane · illustrative property" : brief.propertyAddress}</span>{project && <div className="view-switch">{conceptPreview && <button className={view === "concept" ? "selected" : ""} onClick={() => setView("concept")}>Concept</button>}<button className={view === "render" || (view === "concept" && !conceptPreview) ? "selected" : ""} onClick={() => { setView("render"); if (project.scene.renderer === "pending") void renderProject(project); }}>3D view</button><button className={view === "plan" ? "selected" : ""} onClick={() => setView("plan")}>Site plan</button></div>}</div>
+          <div className={`visual-toolbar ${conceptPreview ? "has-photoreal" : ""}`}><span className="property-label"><MapPin size={13}/>{site.isDemo ? "24 Maple Lane · illustrative property" : brief.propertyAddress}</span>{project && <div className="view-switch"><button className={view === "concept" ? "selected" : ""} onClick={() => setView("concept")}>Concept</button><button className={view === "render" ? "selected" : ""} onClick={() => { setView("render"); if (project.scene.renderer === "pending") void renderProject(project); }}>Blender / 3D</button><button className={view === "plan" ? "selected" : ""} onClick={() => setView("plan")}>Site plan</button></div>}</div>
           {stage === "brief" ? <PropertyContext brief={brief} site={site}/> : <ProjectVisual project={project} site={site} view={view} renderBusy={renderBusy}/>}
+          {project && stage === "design" && <div className="concept-controls"><div><strong>Imagine this plan, brought to life.</strong><p>{visualNote || "AI imagery uses your current layout as a reference. Check dimensions in the site plan."}</p></div><button className="button secondary" disabled={!!busy} onClick={() => void regenerateConcept()}><Sparkles size={15}/>{conceptPreview ? "Regenerate concept" : "Generate concept"}</button></div>}
           <div className="site-strip"><span><TreePine size={15}/>{site.protectedTree ? "Mature oak to preserve" : "Existing features unverified"}</span><span><Layers3 size={15}/>{site.isDemo ? "10′ rear · 5′ side setback fixtures" : "Setbacks not verified"}</span><span className="fixture-tag">{site.isDemo ? "Illustrative site" : "Assumed geometry"}</span></div>
         </div>
         <aside className="brief-panel">
@@ -156,14 +170,14 @@ export function DreamBid() {
           </form></> : stage === "concepts" ? <><div className="panel-title"><Sparkles size={18}/><h2>A little considered thinking.</h2></div><p className="analysis-text">{analysis}</p><div className="intent-list"><span><Check size={15}/>Your budget: {dollars(brief.budget)}</span><span><Check size={15}/>Exactly three design directions</span><span><Check size={15}/>Site assumptions made visible</span></div><button className="button secondary full" onClick={() => setStage("brief")} disabled={!!busy}>Edit your brief</button><p className="form-note">Choose a concept below to see its full layout and scope.</p></> : project && <><div className="panel-title"><span className="small-number">{String(project.version).padStart(2, "0")}</span><h2>Your plan, taking shape.</h2></div><div className="estimate-label">INDICATIVE PROJECT TOTAL</div><div className="big-estimate">{dollars(project.estimatedTotal)}</div><div className="budget-track"><span style={{ width: `${Math.min(100, project.estimatedTotal / project.budgetMaximum * 100)}%` }}/></div><p className={`budget-remaining ${project.estimatedTotal > project.budgetMaximum ? "over-budget" : ""}`}>{project.estimatedTotal > project.budgetMaximum ? `${dollars(project.estimatedTotal-project.budgetMaximum)} over your` : `${dollars(project.budgetMaximum-project.estimatedTotal)} within your`} {dollars(project.budgetMaximum)} limit</p><div className="element-summary">{project.elements.filter(e => e.kind !== "tree").map(e => <div key={e.id}><span><span className="element-dot" style={{ background: e.color }}/>{e.label}</span><span>{dollars(e.estimatedCost)}</span></div>)}{project.scopeItems.filter(s => s.elementId === null).map(s => <div key={s.id}><span><span className="element-dot" style={{ background: "#b8b4a5" }}/>{s.category}</span><span>{dollars(s.estimatedCost)}</span></div>)}</div><button className="button secondary full customize-button" onClick={() => { setProject(checkFeasibility(project, site, false)); setStage("editor"); }} disabled={!!busy}>Customize layout<MoveUpRight size={16}/></button><button className="button primary full" onClick={() => void getQuotes()} disabled={!!busy || project.feasibility.status === "conflicts"}>Get 3 quotes<ArrowRight size={17}/></button><p className="form-note">Synthetic contractor bids for this exact scope.</p></>}
         </aside>
       </section>
-      {stage === "concepts" && <section className="concept-section"><div className="section-heading"><h2>Find your kind of outdoors.</h2><span>01 — 03 / CURATED DIRECTIONS</span></div><div className="concept-grid">{concepts.map((concept, i) => <button className={`concept-card ${concept.recommended ? "recommended" : ""}`} key={concept.id} onClick={() => void selectConcept(concept)} disabled={!!busy}><div className={`concept-swatch ${concept.palette}`}><img src={`/demo/${concept.palette}.png`} alt="Illustrative Blender reference layout; selected project is rendered separately"/><small className="reference-label">REFERENCE LAYOUT · FIXTURE</small><span>0{i + 1}</span><div className="material-chips"><i/><i/><i/></div>{concept.recommended && <b><Sparkles size={11}/>Our pick for you</b>}</div><div className="concept-body"><div className="concept-name"><h3>{concept.title}</h3><MoveUpRight size={19}/></div><p>{concept.designDirection}</p><div className="concept-tags">{concept.majorElements.map(e => <span key={e}>{e}</span>)}</div><div className="concept-price"><strong>{dollars(concept.budgetRange.low)}–{dollars(concept.budgetRange.high)}</strong><span>Explore this idea<ArrowUpRight size={14}/></span></div></div></button>)}</div></section>}
+      {stage === "concepts" && <section className="concept-section"><div className="section-heading"><h2>Find your kind of outdoors.</h2><span>01 — 03 / CURATED DIRECTIONS</span></div><div className="concept-grid">{concepts.map((concept, i) => <button className={`concept-card ${concept.recommended ? "recommended" : ""}`} key={concept.id} onClick={() => void selectConcept(concept)} disabled={!!busy}><div className={`concept-swatch ${concept.palette}`}><img src={`/demo/photoreal/${concept.palette}.png`} alt={`Retained AI concept reference for ${concept.title}; illustrative, not a current-property photo or a freshly generated design`}/><small className="reference-label">AI CONCEPT REFERENCE · FIXTURE</small><span>0{i + 1}</span><div className="material-chips"><i/><i/><i/></div>{concept.recommended && <b><Sparkles size={11}/>Our pick for you</b>}</div><div className="concept-body"><div className="concept-name"><h3>{concept.title}</h3><MoveUpRight size={19}/></div><p>{concept.designDirection}</p><div className="concept-tags">{concept.majorElements.map(e => <span key={e}>{e}</span>)}</div><div className="concept-price"><strong>{dollars(concept.budgetRange.low)}–{dollars(concept.budgetRange.high)}</strong><span>Explore this idea<ArrowUpRight size={14}/></span></div></div></button>)}</div></section>}
       {stage === "design" && project && <section className="project-details"><div className="revision-card"><div className="section-heading"><h2>A change of plans? That is the plan.</h2><Sparkles size={19}/></div><p>Refine your design. Your budget and everything you want to keep stay with it.</p><form onSubmit={e => { e.preventDefault(); void revise(); }}><textarea aria-label="Revise your project" placeholder="What would you like to change?" value={revision} onChange={e => setRevision(e.target.value)} rows={2} minLength={5} maxLength={2000} required/><div className="revision-actions"><button type="button" className="text-button" onClick={() => setRevision(REVISION_PROMPT)}>Try: swap pergola for an outdoor kitchen</button><button className="button primary" disabled={!!busy || revision.length < 5}>Revise my plan<ArrowRight size={16}/></button></div></form>{project.revisionHistory.length > 0 && <div className="revision-receipt"><span className="eyebrow">REVISION {project.version} · WHAT CHANGED</span><p>{project.revisionHistory.at(-1)?.summary}</p><div>{project.revisionHistory.at(-1)?.changes.map(c => <span key={c}><Check size={12}/>{c}</span>)}</div><p className="preserved"><ShieldCheck size={14}/>Kept: {project.revisionHistory.at(-1)?.preserved.join(" · ")}</p></div>}</div><div className="feasibility-card"><div className="section-heading"><h2>A plan with its feet on the ground.</h2><ShieldCheck size={21}/></div><p className="status-label">PRELIMINARY FEASIBILITY · {site.isDemo ? "FIXTURE RULES" : "UNVERIFIED SITE"}</p>{project.feasibility.conflicts.map((c, i) => <div className={`check-row ${c.resolved ? "" : "unresolved"}`} key={i}><span>{c.resolved ? <Check size={14}/> : "!"}</span><p>{c.explanation}</p></div>)}<div className="check-row"><span><TreePine size={14}/></span><p>{site.protectedTree ? (project.feasibility.status === "conflicts" ? "Mature oak is retained. Resolve the placement conflicts before confirming protection-zone clearance." : "Mature oak stays. New structures keep clear of its protection zone.") : "Site features need to be confirmed from a survey."}</p></div><p className="feasibility-disclaimer">{project.feasibility.disclaimer}</p></div></section>}
       <details className="provenance"><summary><span><Layers3 size={16}/>What we know about this site</span><span>Sources & assumptions<ChevronDown size={15}/></span></summary><p>{site.summary}</p><div className="fact-grid">{(["rearSetback", "sideSetback", "zoningDistrict", "lotArea", "easements", "historicStatus"] as const).map(key => { const fact = site[key]; return <div key={key}><span>{key.replace(/([A-Z])/g, " $1")}</span><strong>{fact.value === null ? "Not verified" : `${fact.value}${fact.unit ? ` ${fact.unit}` : ""}`}</strong><small>{fact.status} · {fact.source}<br/>{fact.note}</small></div>; })}</div><p className="form-note">No government records or aerial imagery retrieved. Illustrative geometry is never treated as authoritative.</p></details>
       </>}
-      {stage === "editor" && project && <LayoutEditor project={project} site={site} onChange={(next, committed) => { setProject(next); setQuotes([]); setRecommendation(null); if (committed) setMeta(null); }} onClose={() => { setStage("design"); setView("plan"); }}/>}
+      {stage === "editor" && project && <LayoutEditor project={project} site={site} demoMode={demoMode} onAssistantApply={(next, engine) => { setProject(next); setMeta(engine); setQuotes([]); setRecommendation(null); }} onChange={(next, committed) => { setProject(next); setQuotes([]); setRecommendation(null); if (committed) setMeta(null); }} onClose={() => { setStage("design"); setView("plan"); }}/>}
       {stage === "quotes" && project && recommendation && <QuoteComparison project={project} site={site} quotes={quotes} recommendation={recommendation} onBack={() => setStage("design")} onDownload={downloadBidPackage}/>}
       <footer className="footer"><span><Leaf size={14}/> More possibility. Fewer unknowns.</span><span>Hackathon prototype · preliminary designs · synthetic pricing</span><a href="https://github.com/fergushurley/dreambid" target="_blank" rel="noreferrer">Built in the open<ArrowUpRight size={12}/></a></footer>
     </main>
-    {busy && <div className="working-toast" role="status" aria-live="polite"><span className="working-spinner"/><div><strong>{busy}</strong><span>{demoMode ? "Replaying the canonical fixture" : "Astra reasons over the project; constraints are checked in code"}</span></div></div>}
+    {busy && <div className="working-toast" role="status" aria-live="polite"><span className="working-spinner"/><div><strong>{busy}</strong><span>{busy.startsWith("Creating your AI") ? "Preparing the geometry reference and image · this can take 1–3 minutes" : demoMode ? "Replaying the canonical fixture" : "Astra reasons over the project; constraints are checked in code"}</span></div></div>}
   </div>;
 }

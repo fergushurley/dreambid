@@ -8,7 +8,7 @@ Built September 10, 2026. The public repository contains the code, fixtures, ren
 2. Open http://127.0.0.1:3000. Use a wide browser window so all three quote cards fit together.
 3. Click Start a new project. Enable **Demo playback** for a deterministic one-minute recording. This explicitly labels fixture reasoning and avoids variable API latency. Leave it off for live Astra; ordinary calls can take tens of seconds, and failed calls are visibly labeled fallback.
 4. Confirm `npm run smoke:astra`, `npm test`, and `npm run smoke:flow` pass. `npm run render:fixtures` regenerates the retained Blender assets if needed.
-5. Check the main project visual's label. Photoreal concepts are pre-generated illustrative images; **3D view** is the deterministic Blender result; **Site plan** is the exact diagram of the structured footprints. Never call photoreal concepts real property photos or live renders.
+5. Check the main project visual's label. Photoreal concepts can be retained AI references or newly generated concepts (use the visible label); **Blender / 3D** is the deterministic Blender result; **Site plan** is the exact diagram of the structured footprints. Never call photoreal concepts real property photos or exact construction drawings. See [the interactive $75K demo](LAYOUT.md) for the catalog, edge resizing, Astra budget patch and regeneration flow.
 
 ## Exact canonical inputs
 
@@ -69,7 +69,7 @@ Normalized-price rank: A, C, B. Recommendation: A. The seemingly cheapest C cost
 | API missing key, quota exhausted, timeout or invalid output | Visible fallback badge. Enable Demo playback and use exact canonical inputs. State that the reasoning is a fixture replay. Never hide the badge. |
 | Arbitrary offline revision unsupported | The existing project stays intact with an actionable error. Use the canonical revision or restore funded Astra access. |
 | Blender unavailable or times out | A deterministic SVG plan renders; Site plan remains available. Retained repo Blender images still show the canonical references, labeled appropriately. |
-| Photoreal concept missing / geometry changed | The visualization switches to the current Blender scene or site plan. It must not show an unrelated cached concept. |
+| Photoreal concept missing / geometry changed | The Concept tab falls back to the current site plan with a Generate concept action. The separate Blender / 3D tab shows geometry. It must not show an unrelated cached concept. |
 | Property records or zoning unavailable | Show unknown facts, illustrative geometry and professional-verification notes. Never relabel fixtures as government data. |
 | Reload / browser interruption | Use the offered saved project from this browser. Photos are not persisted; upload again if needed for a new analysis. |
 | Local server failure | Restart `npm run dev`; if development compilation is disrupted, use the verified production build with `npm start`. |

@@ -51,6 +51,7 @@ function addFeature(project: ProjectSpec, catalogItemId: string, position: { x: 
 export function applyLayoutPatch(input: ProjectSpec, rawPatch: LayoutPatch, site: SiteContext, record = true): ProjectSpec {
   const patch = layoutPatchSchema.parse(rawPatch);
   const project = projectSpecSchema.parse(structuredClone(input));
+  if (!patch.operations.length) return checkFeasibility(project, site, false);
   const changed = new Set<string>();
   for (const op of patch.operations) {
     if (op.action === "add") { changed.add(addFeature(project, op.catalogItemId, op.position, op.dimensions).id); continue; }
@@ -61,7 +62,7 @@ export function applyLayoutPatch(input: ProjectSpec, rawPatch: LayoutPatch, site
     if (op.action === "remove" || op.action === "replace") {
       project.elements = project.elements.filter(row => row.id !== e.id);
       project.scopeItems = project.scopeItems.filter(row => row.elementId !== e.id);
-      if (op.action === "replace") changed.add(addFeature(project, op.catalogItemId, e.position, null).id);
+      if (op.action === "replace") changed.add(addFeature(project, op.catalogItemId, op.position ?? e.position, op.dimensions).id);
     } else {
       if (op.position) e.position = op.position;
       if (op.dimensions) { e.pricing = ensurePricing(e); e.size = { ...e.size, ...op.dimensions }; checkSize(e); reprice(project, e); }
@@ -70,7 +71,8 @@ export function applyLayoutPatch(input: ProjectSpec, rawPatch: LayoutPatch, site
   if (!project.scopeItems.length || project.scopeItems.every(s => s.estimatedCost <= 0)) throw new Error("Keep at least one priced scope item in the project.");
   project.estimatedTotal = project.scopeItems.reduce((n, s) => n + s.estimatedCost, 0);
   project.scene = { units: "feet", camera: "isometric", renderer: "pending", renderUrl: null, blendFile: null };
-  if (record) {
+  delete project.conceptVisual;
+  if (record && patch.operations.length > 0) {
     project.version = input.version + 1;
     project.revisionHistory.push({ version: project.version, instruction: patch.summary, summary: patch.summary, changes: patch.operations.map(op => `${op.action}: ${"elementId" in op ? input.elements.find(e => e.id === op.elementId)?.label ?? op.elementId : catalogById.get(op.catalogItemId)?.name}`), preserved: input.elements.filter(e => !changed.has(e.id)).map(e => e.label), createdAt: new Date().toISOString() });
   }

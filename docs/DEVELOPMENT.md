@@ -63,3 +63,12 @@ DreamBid was built from scratch during the GPT-6 Astra NYC Hackathon on Septembe
 Inspected a clean repository at `b4c8861`; extended the existing spec, renderer and SVG plan rather than replacing the architecture. Added the 31-feature catalog, optional backward-compatible element pricing metadata, typed layout patches, a running range/midpoint budget and a pointer/keyboard/numeric editor. The same spec drives geometry, scope, autosave, rendering and synthetic bids. Added explicit invalid-placement warnings and server-side quote gating for unresolved geometry. Current property context is now visible before concept generation, with immediate fixture isolation for custom addresses. See `docs/LAYOUT.md` for formulas, assumptions, verified behavior and the next milestone.
 
 Validation: 18 tests passed, production build passed, and the original deterministic HTTP flow still passed through real Blender output. Browser checks exercised custom-address isolation, concept selection, catalog addition, pointer movement and resizing. P1 remains catalog-aware Astra commands and concept regeneration; this checkpoint does not claim those are implemented yet.
+
+
+## P1: Astra layout edits, photoreal regeneration and direct editor controls
+
+Added reviewable structured layout patches and budget substitutions, with live Astra verified against the expanded $75K project and synthetic quotes normalized to the final scope. One observed live budget range was $42,910–$70,060; the protected oak remained unchanged and deterministic geometry had no unresolved conflicts. Real image generation used the current Blender render as an input, and the resulting photoreal concept was visually inspected. Retained additional AI references for the meadow and retreat concepts.
+
+Browser checks verified a live Astra proposal, rejection of a stale proposal after more feature additions, and the requested direct editor controls: the court's right edge reduced width from 25 to 20 ft and reduced its range from $18,000–$35,000 to $15,120–$29,400; the corner × removed the court, restored the previous $61,600 midpoint and cleared its conflicts.
+
+Git identity was corrected locally at the user's request. The five earlier commits were subsequently rewritten with explicit authorization, preserving each tree, message and timestamp. Backup `codex/identity-backup-d9955a2` remains. P0 is now `bed1776`; the two older GitHub-authored repository commits were preserved. Future author and committer identity is Fergus Hurley <fghurley@alum.mit.edu>.

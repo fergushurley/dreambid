@@ -50,6 +50,7 @@ export function finalizeProject(input: ProjectSpec, site: SiteContext): ProjectS
     if (!tree || tree.position.x !== site.protectedTree.position.x || tree.position.y !== site.protectedTree.position.y) throw new Error("Protected mature tree must remain at its original location.");
   }
   p.scene = { units: "feet", camera: "isometric", renderUrl: null, blendFile: null, renderer: "pending" };
+  delete p.conceptVisual;
   return checkFeasibility(p, site);
 }
 
@@ -68,7 +69,7 @@ export const revisionPatchSchema = z.object({
 export type RevisionPatch = z.infer<typeof revisionPatchSchema>;
 
 /** Enforce explicit dollar-denominated caps independently of the model's patch. */
-function requestedBudgetLimit(instruction: string, currentMaximum: number): number {
+export function requestedBudgetLimit(instruction: string, currentMaximum: number): number {
   const limits = [...instruction.matchAll(/\b(?:under|below|at most|no more than|budget(?:\s+of)?|maximum(?:\s+of)?|cap(?:\s+of)?)\s*\$\s*(\d[\d,]*(?:\.\d+)?)\s*(k\b)?/gi)]
     .map(match => Number(match[1].replace(/,/g, "")) * (match[2] ? 1000 : 1));
   return Math.min(currentMaximum, ...limits);

@@ -104,8 +104,8 @@ export const layoutPatchSchema = z.object({
     z.object({ action: z.literal("add"), catalogItemId: z.string(), position: pointSchema.nullable(), dimensions: dimensionsSchema.nullable() }),
     z.object({ action: z.literal("update"), elementId: z.string(), position: pointSchema.nullable(), dimensions: dimensionsSchema.nullable() }),
     z.object({ action: z.literal("remove"), elementId: z.string() }),
-    z.object({ action: z.literal("replace"), elementId: z.string(), catalogItemId: z.string() }),
-  ])).min(1).max(20),
+    z.object({ action: z.literal("replace"), elementId: z.string(), catalogItemId: z.string(), position: pointSchema.nullable(), dimensions: dimensionsSchema.nullable() }),
+  ])).max(20),
 });
 export type LayoutPatch = z.infer<typeof layoutPatchSchema>;
 
@@ -126,6 +126,7 @@ export const projectSpecSchema = z.object({
   hardConstraints: z.array(z.string()), softConstraints: z.array(z.string()),
   budgetTarget: money, budgetMaximum: money,
   estimatedTotal: money, spaceType: z.literal("backyard"), dimensions: dimensionsSchema,
+  conceptVisual: z.object({ imageUrl: z.string(), specSignature: z.string(), model: z.string(), createdAt: z.string(), source: z.enum(["live", "reference"]), disclaimer: z.string() }).optional(),
   elements: z.array(projectElementSchema).min(1).max(40),
   scopeItems: z.array(scopeItemSchema).min(1).max(80), assumptions: z.array(z.string()),
   revisionHistory: z.array(z.object({ version: z.number().int(), instruction: z.string(), summary: z.string(), changes: z.array(z.string()), preserved: z.array(z.string()), createdAt: z.string() })),

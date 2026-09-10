@@ -25,7 +25,7 @@
           27,
           21,
           8,
-          "Warm LED \u00b7 2700K",
+          "Warm LED · 2700K",
           "#eacb86"
         ],
         [
@@ -112,7 +112,7 @@
           27,
           21,
           8,
-          "Warm LED \u00b7 2700K",
+          "Warm LED · 2700K",
           "#eacb86"
         ],
         [
@@ -150,5 +150,174 @@
         ]
       ]
     ]
+  },
+  {
+    "variant": "meadow",
+    "imageUrl": "/demo/photoreal/meadow.png",
+    "geometry": [
+      48,
+      58,
+      [
+        [
+          "dining",
+          "dining",
+          10,
+          13,
+          10,
+          6,
+          2.5,
+          "Teak and linen",
+          "#b89670"
+        ],
+        [
+          "lights",
+          "lighting",
+          8,
+          8,
+          27,
+          21,
+          8,
+          "Warm LED · 2700K",
+          "#eacb86"
+        ],
+        [
+          "patio",
+          "patio",
+          7,
+          7,
+          25,
+          24,
+          0.25,
+          "Compacted gravel",
+          "#c7bea6"
+        ],
+        [
+          "pergola",
+          "pergola",
+          5,
+          10,
+          12,
+          12,
+          9,
+          "Natural cedar",
+          "#a68059"
+        ],
+        [
+          "planting",
+          "planter",
+          6,
+          34,
+          21,
+          3,
+          2,
+          "Native grasses and terracotta",
+          "#7a8962"
+        ],
+        [
+          "tree",
+          "tree",
+          38,
+          41,
+          12,
+          12,
+          23,
+          "Existing mature oak",
+          "#647755"
+        ]
+      ]
+    ],
+    "model": "gpt-image-2",
+    "generatedAt": "2026-09-10T18:47:24.114Z",
+    "source": "AI concept generated from deterministic Blender fixture; not a property photograph"
+  },
+  {
+    "variant": "retreat",
+    "imageUrl": "/demo/photoreal/retreat.png",
+    "geometry": [
+      48,
+      58,
+      [
+        [
+          "dining",
+          "dining",
+          10,
+          13,
+          10,
+          6,
+          2.5,
+          "Teak and linen",
+          "#b89670"
+        ],
+        [
+          "lights",
+          "lighting",
+          8,
+          8,
+          27,
+          21,
+          8,
+          "Warm LED · 2700K",
+          "#eacb86"
+        ],
+        [
+          "lounge",
+          "lounge",
+          23,
+          20,
+          10,
+          4,
+          3,
+          "Stone and linen",
+          "#c4b7a0"
+        ],
+        [
+          "patio",
+          "patio",
+          7,
+          7,
+          29,
+          24,
+          0.25,
+          "Premium sandstone",
+          "#d4c8af"
+        ],
+        [
+          "pergola",
+          "pergola",
+          5,
+          10,
+          16,
+          12,
+          9,
+          "Natural cedar",
+          "#a68059"
+        ],
+        [
+          "planting",
+          "planter",
+          6,
+          34,
+          21,
+          3,
+          2,
+          "Native grasses and terracotta",
+          "#7a8962"
+        ],
+        [
+          "tree",
+          "tree",
+          38,
+          41,
+          12,
+          12,
+          23,
+          "Existing mature oak",
+          "#647755"
+        ]
+      ]
+    ],
+    "model": "gpt-image-2",
+    "generatedAt": "2026-09-10T18:48:19.001Z",
+    "source": "AI concept generated from deterministic Blender fixture; not a property photograph"
   }
 ]
