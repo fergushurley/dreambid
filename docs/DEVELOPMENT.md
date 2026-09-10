@@ -17,6 +17,15 @@ DreamBid was built from scratch during the GPT-6 Astra NYC Hackathon on Septembe
 - Verified `.env.local`, `.next`, `node_modules`, and generated `.blend` output are ignored.
 - Extra capability selected: Scope X-ray; other additions deferred. See `docs/IDEAS.md`.
 
+## Product domain checkpoint
+- Live Astra smoke passed after the user restored API credit: model `gpt-6-astra`, 2.882 seconds, response `resp_0912054594ab6198016aa2df73c43087d2b3022df74a63b786`.
+- Implemented exactly-three-concept generation, image inputs, structured project drafts, minimal revision patches, and bid audit using Responses API structured outputs.
+- Deterministic checks enforce valid scope references, budget maximum, original protected-tree placement, and preliminary fixture setbacks.
+- A custom address receives unknown property facts instead of inheriting canonical fixture rules.
+- Quote arithmetic is independent of model prose. Canonical A: $42,900; B: $45,900 + $3,000 allowance gap = $48,900; C: $37,900 + $9,700 exclusions = $47,600.
+- Eight domain tests passed: scope totals, geometry repair, provenance isolation, revision preservation, protected-element/over-budget rejection, normalized prices, stale/duplicate bid rejection, impossible-footprint reporting.
+- Deterministic HTTP flow passed concepts → project → revision → quotes → Blender asset. Browser testing found a localhost/127.0.0.1 origin mismatch; origin checking now uses the request Host header, with protocol validation.
+
 ## Documentation references
 - https://developers.openai.com/api/docs/models/gpt-6-astra
 - https://developers.openai.com/api/docs/guides/structured-outputs
