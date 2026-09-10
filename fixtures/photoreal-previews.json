@@ -1,0 +1,154 @@
+[
+  {
+    "variant": "terrace",
+    "imageUrl": "/demo/photoreal/terrace.png",
+    "geometry": [
+      48,
+      58,
+      [
+        [
+          "dining",
+          "dining",
+          10,
+          13,
+          10,
+          6,
+          2.5,
+          "Teak and linen",
+          "#b89670"
+        ],
+        [
+          "lights",
+          "lighting",
+          8,
+          8,
+          27,
+          21,
+          8,
+          "Warm LED \u00b7 2700K",
+          "#eacb86"
+        ],
+        [
+          "patio",
+          "patio",
+          7,
+          7,
+          29,
+          24,
+          0.25,
+          "Limestone pavers",
+          "#d4c8af"
+        ],
+        [
+          "pergola",
+          "pergola",
+          5,
+          10,
+          16,
+          12,
+          9,
+          "Natural cedar",
+          "#a68059"
+        ],
+        [
+          "planting",
+          "planter",
+          6,
+          34,
+          21,
+          3,
+          2,
+          "Native grasses and terracotta",
+          "#7a8962"
+        ],
+        [
+          "tree",
+          "tree",
+          38,
+          41,
+          12,
+          12,
+          23,
+          "Existing mature oak",
+          "#647755"
+        ]
+      ]
+    ]
+  },
+  {
+    "variant": "kitchen",
+    "imageUrl": "/demo/photoreal/kitchen.png",
+    "geometry": [
+      48,
+      58,
+      [
+        [
+          "dining",
+          "dining",
+          10,
+          13,
+          10,
+          6,
+          2.5,
+          "Teak and linen",
+          "#b89670"
+        ],
+        [
+          "kitchen",
+          "kitchen",
+          23,
+          23,
+          12,
+          4,
+          3.2,
+          "Stucco, stone and stainless steel",
+          "#b9ad92"
+        ],
+        [
+          "lights",
+          "lighting",
+          8,
+          8,
+          27,
+          21,
+          8,
+          "Warm LED \u00b7 2700K",
+          "#eacb86"
+        ],
+        [
+          "patio",
+          "patio",
+          7,
+          7,
+          29,
+          24,
+          0.25,
+          "Limestone pavers",
+          "#d4c8af"
+        ],
+        [
+          "planting",
+          "planter",
+          6,
+          34,
+          21,
+          3,
+          2,
+          "Native grasses and terracotta",
+          "#7a8962"
+        ],
+        [
+          "tree",
+          "tree",
+          38,
+          41,
+          12,
+          12,
+          23,
+          "Existing mature oak",
+          "#647755"
+        ]
+      ]
+    ]
+  }
+]

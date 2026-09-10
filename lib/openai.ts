@@ -6,7 +6,7 @@ import type { EngineResult } from "@/types";
 export const astraModel = () => process.env.OPENAI_MODEL || "gpt-6-astra";
 export function createOpenAIClient(): OpenAI | null {
   if (!process.env.OPENAI_API_KEY) return null;
-  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY, baseURL: process.env.OPENAI_BASE_URL || undefined, timeout: 55000, maxRetries: 0 });
+  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY, baseURL: process.env.OPENAI_BASE_URL || undefined, timeout: 65000, maxRetries: 0 });
 }
 
 // Only imported by server routes/scripts. Credentials are never returned to clients.
@@ -17,7 +17,7 @@ export async function askAstra<T>(name: string, schema: z.ZodType<T>, instructio
   if (!client) return { data: schema.parse(fallback()), meta: { mode: demo ? "demo" : "fallback", model: astraModel(), reason: demo ? "Deterministic demo selected." : "OPENAI_API_KEY is not configured. Using a labeled fixture fallback.", responseId: null, durationMs: Date.now() - start } };
   try {
     const response = await client.responses.parse({
-      model: astraModel(), reasoning: { effort: "medium" }, store: false,
+      model: astraModel(), reasoning: { effort: "low" }, store: false,
       instructions,
       input: [{ role: "user", content: [
         { type: "input_text", text: JSON.stringify(payload) },

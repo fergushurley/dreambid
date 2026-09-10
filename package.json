@@ -9,7 +9,9 @@
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
     "smoke:astra": "tsx scripts/smoke-astra.ts",
-    "smoke:blender": "tsx scripts/smoke-blender.ts"
+    "smoke:blender": "tsx scripts/smoke-blender.ts",
+    "smoke:flow": "tsx scripts/smoke-flow.ts",
+    "render:fixtures": "tsx scripts/render-fixtures.ts"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.0",

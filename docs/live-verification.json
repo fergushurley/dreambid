@@ -1,0 +1,42 @@
+{
+  "date": "2026-09-10",
+  "mode": "live",
+  "model": "gpt-6-astra",
+  "imageInput": "Repo-generated illustrative Blender site image; not a real homeowner photo.",
+  "stages": {
+    "concepts": {
+      "mode": "live",
+      "model": "gpt-6-astra",
+      "reason": null,
+      "responseId": "resp_002a6cc7ec7715a2016aa2e6f941d887d2aa5f8af83b8a650b",
+      "durationMs": 31135
+    },
+    "project": {
+      "mode": "live",
+      "model": "gpt-6-astra",
+      "reason": null,
+      "responseId": "resp_0c5d11d7733f962d016aa2e718c25487d2b97aed5a4f67077b",
+      "durationMs": 51065
+    },
+    "revise": {
+      "mode": "live",
+      "model": "gpt-6-astra",
+      "reason": null,
+      "responseId": "resp_0c1e6eef076eb484016aa2e74c28e087d299c9e966655efb1e",
+      "durationMs": 34553
+    },
+    "quotes": {
+      "mode": "live",
+      "model": "gpt-6-astra",
+      "reason": null,
+      "responseId": "resp_01d3d8d299214fc1016aa2e76f866887d2b8d860e6ca6d4beb",
+      "durationMs": 21010
+    }
+  },
+  "revision": {
+    "estimatedTotal": 32900,
+    "budgetMaximum": 45000,
+    "version": 2
+  },
+  "renderer": "blender"
+}
