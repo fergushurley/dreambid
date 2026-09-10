@@ -141,3 +141,21 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# DreamBid: local secrets
+.env.local
+.env.*.local
+
+# DreamBid: Python / Blender
+__pycache__/
+*.pyc
+*.pyo
+*.blend
+*.blend1
+
+# DreamBid: generated demo assets
+public/generated/*
+!public/generated/.gitkeep
+
+# macOS
+.DS_Store
