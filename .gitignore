@@ -159,3 +159,10 @@ public/generated/*
 
 # macOS
 .DS_Store
+
+# Local tooling and test artifacts
+.sites-runtime/
+.artifacts/
+test-results/
+playwright-report/
+*.blend2
