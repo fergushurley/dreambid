@@ -90,3 +90,19 @@ test("budget advice never invents price discounts to satisfy an impossible cap",
  assert.throws(()=>budgetFitPatch(p,canonicalSiteContext,5000),/exceed/);assert.equal(JSON.stringify(p),snapshot);
  assert.doesNotThrow(()=>zodTextFormat(layoutAdviceSchema,"layout_advice"));
 });
+
+test("90 degree rotation preserves center and linear price; vertical fence resizing uses its length", () => {
+ const p=add(base(),"fence",6,46),fence=p.elements.at(-1)!;
+ const rotate=(project:typeof p,id=fence.id)=>applyLayoutPatch(project,{summary:"Rotate 90 degrees",operations:[{action:"rotate",elementId:id}]},canonicalSiteContext);
+ const next=rotate(p),e=next.elements.at(-1)!;
+ assert.deepEqual(e.size,{...fence.size,widthFt:1,depthFt:30});assert.equal(e.rotationDeg,90);
+ assert.equal(e.position.x+e.size.widthFt/2,fence.position.x+fence.size.widthFt/2);
+ assert.equal(e.position.y+e.size.depthFt/2,fence.position.y+fence.size.depthFt/2);
+ assert.deepEqual(e.indicativeRange,fence.indicativeRange);assert.deepEqual(next.scopeItems,p.scopeItems);assert.equal(next.estimatedTotal,p.estimatedTotal);
+ assert.ok(next.feasibility.conflicts.some(c=>c.elementId===e.id&&!c.resolved));assert.equal(next.version,p.version+1);
+ const smaller=applyLayoutPatch(next,{summary:"Shorten vertical fence",operations:[{action:"update",elementId:e.id,position:null,dimensions:{widthFt:1,depthFt:20}}]},canonicalSiteContext);
+ assert.ok(smaller.estimatedTotal<next.estimatedTotal);assert.equal(smaller.scopeItems.find(s=>s.elementId===e.id)!.quantity,20);
+ const restored=rotate(rotate(rotate(next))).elements.at(-1)!;
+ assert.deepEqual(restored.position,fence.position);assert.deepEqual(restored.size,fence.size);assert.equal(restored.rotationDeg,0);
+ assert.throws(()=>rotate(p,"tree"),/protected/);
+});

@@ -1,0 +1,15 @@
+{
+  "createdAt": "2026-09-10T19:48:56.710Z",
+  "durationSeconds": 55,
+  "renderer": "Blender Cycles",
+  "quality": "max",
+  "maximumSamples": 128,
+  "adaptiveThreshold": 0.04,
+  "resolution": [
+    1920,
+    1280
+  ],
+  "source": "Authored fixture geometry with procedural materials, individual leaves, modeled siding, roof and fence. Architectural finishes and heights are illustrative.",
+  "siteContextId": "site-maple-demo",
+  "sourceScene": "/generated/4db78e20d4b485677fb9.png"
+}

@@ -66,11 +66,11 @@ export function DreamBid() {
       setConcepts(result.data.concepts); setAnalysis(result.data.analysis); setSite(result.site); setMeta(result.meta); setStage("concepts");
     });
   }
-  async function renderProject(p: ProjectSpec) {
+  async function renderProject(p: ProjectSpec, quality: "preview" | "max" = "preview") {
     setRenderBusy(true);
     try {
-      const result = await post<{ data: ProjectSpec["scene"] }>("/api/render", { project: p });
-      setProject(current => current?.id === p.id && current.version === p.version ? { ...current, scene: result.data } : current);
+      const result = await post<{ data: ProjectSpec["scene"] }>("/api/render", { project: p, quality }, quality === "max" ? 330000 : 90000);
+      setProject(current => current?.id === p.id && current.version === p.version && visualSignature(current) === visualSignature(p) ? { ...current, scene: result.data } : current);
     } catch { /* The site plan is a deterministic, labeled fallback. */ }
     finally { setRenderBusy(false); }
   }
@@ -84,7 +84,7 @@ export function DreamBid() {
   async function revise() {
     if (!project) return;
     await run("Revising the scope and checking what stays…", async () => {
-      const result = await post<{ data: ProjectSpec; site: SiteContext; meta: EngineMeta }>(project.elements.some(e => e.pricing || e.catalogItemId) ? "/api/layout" : "/api/revise", { project, instruction: revision, demoMode });
+      const result = await post<{ data: ProjectSpec; site: SiteContext; meta: EngineMeta }>(project.elements.some(e => e.pricing || e.catalogItemId || e.rotationDeg !== undefined) ? "/api/layout" : "/api/revise", { project, instruction: revision, demoMode });
       setProject(result.data); setSite(result.site); setMeta(result.meta); setRevision(""); setQuotes([]); setRecommendation(null); setView("concept");
       void renderProject(result.data);
     });
@@ -157,6 +157,7 @@ export function DreamBid() {
           <div className={`visual-toolbar ${conceptPreview ? "has-photoreal" : ""}`}><span className="property-label"><MapPin size={13}/>{site.isDemo ? "24 Maple Lane · illustrative property" : brief.propertyAddress}</span>{project && <div className="view-switch"><button className={view === "concept" ? "selected" : ""} onClick={() => setView("concept")}>Concept</button><button className={view === "render" ? "selected" : ""} onClick={() => { setView("render"); if (project.scene.renderer === "pending") void renderProject(project); }}>Blender / 3D</button><button className={view === "plan" ? "selected" : ""} onClick={() => setView("plan")}>Site plan</button></div>}</div>
           {stage === "brief" ? <PropertyContext brief={brief} site={site}/> : <ProjectVisual project={project} site={site} view={view} renderBusy={renderBusy}/>}
           {project && stage === "design" && <div className="concept-controls"><div><strong>Imagine this plan, brought to life.</strong><p>{visualNote || "AI imagery uses your current layout as a reference. Check dimensions in the site plan."}</p></div><button className="button secondary" disabled={!!busy} onClick={() => void regenerateConcept()}><Sparkles size={15}/>{conceptPreview ? "Regenerate concept" : "Generate concept"}</button></div>}
+          {project && view === "render" && <div className="blender-quality"><span>{renderBusy ? "Blender is tracing your geometry…" : project.scene.renderer === "fallback" ? "Blender unavailable · deterministic fallback geometry" : project.scene.quality === "max" ? "High-detail Blender view · current project geometry" : "Deterministic Blender geometry · shared with your site plan"}</span><button className="text-button" disabled={renderBusy || !!busy} onClick={() => void renderProject(project, "max")}>{renderBusy ? "Rendering…" : "Render at max quality"}</button></div>}
           <div className="site-strip"><span><TreePine size={15}/>{site.protectedTree ? "Mature oak to preserve" : "Existing features unverified"}</span><span><Layers3 size={15}/>{site.isDemo ? "10′ rear · 5′ side setback fixtures" : "Setbacks not verified"}</span><span className="fixture-tag">{site.isDemo ? "Illustrative site" : "Assumed geometry"}</span></div>
         </div>
         <aside className="brief-panel">

@@ -3,6 +3,13 @@ import { catalogById } from "@/fixtures/feature-catalog";
 import { checkFeasibility } from "./feasibility";
 
 const round = (n: number) => Math.round(n / 10) * 10;
+export const isQuarterTurn = (e: ProjectElement) => e.rotationDeg === 90 || e.rotationDeg === 270;
+export function dimensionBounds(e: ProjectElement) {
+  const item = catalogById.get(e.catalogItemId ?? e.kind);
+  const orient = (size: {widthFt:number;depthFt:number}) => isQuarterTurn(e) ? {widthFt:size.depthFt,depthFt:size.widthFt} : size;
+  return {min:orient(item?.minSize ?? {widthFt:1,depthFt:1}),max:orient(item?.maxSize ?? {widthFt:100,depthFt:100})};
+}
+function pricingSize(e: ProjectElement) { return isQuarterTurn(e) ? {...e.size,widthFt:e.size.depthFt,depthFt:e.size.widthFt} : e.size; }
 export function priceAtSize(model: FeaturePriceModel, size: ProjectElement["size"]) {
   const scale = model.basis === "fixed" ? 1 : model.basis === "linear" ? size.widthFt / model.baseWidthFt : size.widthFt * size.depthFt / (model.baseWidthFt * model.baseDepthFt);
   const factor = model.fixedShare + (1 - model.fixedShare) * scale;
@@ -15,22 +22,24 @@ export function budgetSummary(project: ProjectSpec): BudgetSummary {
   return budgetSummarySchema.parse({ range, planningTotal: project.estimatedTotal, target: project.budgetTarget, maximum: project.budgetMaximum, status: project.estimatedTotal > project.budgetMaximum ? "over" : range.high > project.budgetMaximum ? "uncertain" : "within", overBy: Math.max(0, project.estimatedTotal - project.budgetMaximum) });
 }
 function ensurePricing(e: ProjectElement): FeaturePriceModel {
-  return e.pricing ?? { basis: catalogById.get(e.kind)?.priceModel.basis ?? "area", baseWidthFt: e.size.widthFt, baseDepthFt: e.size.depthFt, baseLow: e.estimatedCost * .85, baseHigh: e.estimatedCost * 1.15, fixedShare: catalogById.get(e.kind)?.priceModel.fixedShare ?? .25 };
+  const size = pricingSize(e);
+  return e.pricing ?? { basis: catalogById.get(e.kind)?.priceModel.basis ?? "area", baseWidthFt: size.widthFt, baseDepthFt: size.depthFt, baseLow: e.estimatedCost * .85, baseHigh: e.estimatedCost * 1.15, fixedShare: catalogById.get(e.kind)?.priceModel.fixedShare ?? .25 };
 }
 function reprice(project: ProjectSpec, e: ProjectElement) {
   if (!e.pricing) return;
-  const range = priceAtSize(e.pricing, e.size);
+  const range = priceAtSize(e.pricing, pricingSize(e));
   const total = Math.round((range.low + range.high) / 2);
   const rows = project.scopeItems.filter(s => s.elementId === e.id);
   const old = rows.reduce((n, s) => n + s.estimatedCost, 0);
   let remaining = total;
-  rows.forEach((s, i) => { s.estimatedCost = i === rows.length - 1 ? remaining : Math.round(total * (old ? s.estimatedCost / old : 1 / rows.length)); remaining -= s.estimatedCost; s.quantity = e.pricing!.basis === "area" ? e.size.widthFt * e.size.depthFt : e.pricing!.basis === "linear" ? e.size.widthFt : 1; s.unit = e.pricing!.basis === "area" ? "sq ft" : e.pricing!.basis === "linear" ? "linear ft" : "item"; });
+  rows.forEach((s, i) => { s.estimatedCost = i === rows.length - 1 ? remaining : Math.round(total * (old ? s.estimatedCost / old : 1 / rows.length)); remaining -= s.estimatedCost; s.quantity = e.pricing!.basis === "area" ? e.size.widthFt * e.size.depthFt : e.pricing!.basis === "linear" ? pricingSize(e).widthFt : 1; s.unit = e.pricing!.basis === "area" ? "sq ft" : e.pricing!.basis === "linear" ? "linear ft" : "item"; });
   e.indicativeRange = range; e.estimatedCost = total;
 }
 function checkSize(e: ProjectElement) {
   const item = catalogById.get(e.catalogItemId ?? e.kind);
   if (!item) return;
-  if (e.size.widthFt < item.minSize.widthFt || e.size.widthFt > item.maxSize.widthFt || e.size.depthFt < item.minSize.depthFt || e.size.depthFt > item.maxSize.depthFt) throw new Error(`${e.label}: use width ${item.minSize.widthFt}–${item.maxSize.widthFt} ft and depth ${item.minSize.depthFt}–${item.maxSize.depthFt} ft.`);
+  const {min,max} = dimensionBounds(e);
+  if (e.size.widthFt < min.widthFt || e.size.widthFt > max.widthFt || e.size.depthFt < min.depthFt || e.size.depthFt > max.depthFt) throw new Error(`${e.label}: use width ${min.widthFt}–${max.widthFt} ft and depth ${min.depthFt}–${max.depthFt} ft.`);
 }
 function addFeature(project: ProjectSpec, catalogItemId: string, position: { x: number; y: number } | null, dimensions: { widthFt: number; depthFt: number } | null) {
   const item = catalogById.get(catalogItemId);
@@ -59,7 +68,13 @@ export function applyLayoutPatch(input: ProjectSpec, rawPatch: LayoutPatch, site
     if (!e) throw new Error("An edited element no longer exists. Refresh the plan and retry.");
     if (e.preserved || e.kind === "tree") throw new Error("The protected tree and preserved elements cannot be moved, resized or removed.");
     changed.add(e.id);
-    if (op.action === "remove" || op.action === "replace") {
+    if (op.action === "rotate") {
+      const {widthFt,depthFt} = e.size;
+      e.position = {x:e.position.x+(widthFt-depthFt)/2,y:e.position.y+(depthFt-widthFt)/2};
+      e.size = {...e.size,widthFt:depthFt,depthFt:widthFt};
+      e.rotationDeg = (((e.rotationDeg ?? 0)+90)%360) as 0|90|180|270;
+      // Rotation preserves installation quantities and prices, even for linear features.
+    } else if (op.action === "remove" || op.action === "replace") {
       project.elements = project.elements.filter(row => row.id !== e.id);
       project.scopeItems = project.scopeItems.filter(row => row.elementId !== e.id);
       if (op.action === "replace") changed.add(addFeature(project, op.catalogItemId, op.position ?? e.position, op.dimensions).id);

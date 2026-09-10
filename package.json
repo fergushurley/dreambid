@@ -12,6 +12,7 @@
     "smoke:blender": "tsx scripts/smoke-blender.ts",
     "smoke:layout": "tsx scripts/smoke-layout.ts",
     "smoke:flow": "tsx scripts/smoke-flow.ts",
+    "render:property": "tsx scripts/render-property.ts",
     "render:concepts": "tsx scripts/render-concepts.ts",
     "render:fixtures": "tsx scripts/render-fixtures.ts"
   },

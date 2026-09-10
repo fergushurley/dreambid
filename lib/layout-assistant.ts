@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { layoutPatchSchema, type LayoutPatch, type ProjectElement, type ProjectSpec, type SiteContext } from "@/types";
 import { catalogById } from "@/fixtures/feature-catalog";
-import { applyLayoutPatch, budgetSummary } from "./layout";
+import { applyLayoutPatch, budgetSummary, dimensionBounds, isQuarterTurn } from "./layout";
 import { checkFeasibility } from "./feasibility";
 import { requestedBudgetLimit } from "./project";
 export const layoutAdviceSchema = z.object({ patch: layoutPatchSchema, tradeoffs: z.array(z.string()).max(8) });
@@ -26,8 +26,10 @@ export function budgetFitPatch(input: ProjectSpec, site: SiteContext, cap = inpu
       if (!over()) break;
       const item=catalogById.get(e.catalogItemId??e.kind); if (!item || item.priceModel.basis==="fixed") continue;
       const comfortable: Record<string,[number,number]>={patio:[18,14],pavers:[18,14],putting_green:[8,10],mini_golf:[8,12],kitchen:[8,3],plunge_pool:[6,8],planter:[8,2],landscaping:[8,4],lighting:[12,12]};
-      const desired=comfortable[kind]??[item.minSize.widthFt,item.minSize.depthFt];
-      edit({action:"update",elementId:e.id,position:null,dimensions:{widthFt:Math.min(e.size.widthFt,Math.max(item.minSize.widthFt,desired[0])),depthFt:Math.min(e.size.depthFt,Math.max(item.minSize.depthFt,desired[1]))}});
+      const desired=[...(comfortable[kind]??[item.minSize.widthFt,item.minSize.depthFt])];
+      if(isQuarterTurn(e)) desired.reverse();
+      const bounds=dimensionBounds(e);
+      edit({action:"update",elementId:e.id,position:null,dimensions:{widthFt:Math.min(e.size.widthFt,Math.max(bounds.min.widthFt,desired[0])),depthFt:Math.min(e.size.depthFt,Math.max(bounds.min.depthFt,desired[1]))}});
     }
   }
   if (over()) for (const e of [...draft.elements].filter(e=>e.kind==="plunge_pool" && !e.preserved)) { edit({action:"replace",elementId:e.id,catalogItemId:"spa",position:null,dimensions:null}); if (!over()) break; }
@@ -61,7 +63,7 @@ export function fallbackLayoutAdvice(project:ProjectSpec, instruction:string, si
   let patch:LayoutPatch;
   if(isBudgetRequest(instruction)) patch=budgetFitPatch(project,site,requestedBudgetLimit(instruction,project.budgetMaximum));
   else if(/pool.*(?:farther|further|away).*house/i.test(instruction) && (find("pool")||find("plunge_pool"))){const e=(find("pool")||find("plunge_pool"))!;patch={summary:"Move the pool 4 ft farther from the house; check the updated placement warnings.",operations:[update(e,null,{x:e.position.x,y:e.position.y+4})]};}
-  else if(/(?:putting green|mini golf).*smaller/i.test(instruction)&&(find("putting_green")||find("mini_golf"))){const e=(find("putting_green")||find("mini_golf"))!,item=catalogById.get(e.kind)!;patch={summary:"Reduce the putting area and its size-based planning estimate.",operations:[update(e,{widthFt:Math.max(item.minSize.widthFt,Math.round(e.size.widthFt*.75)),depthFt:Math.max(item.minSize.depthFt,Math.round(e.size.depthFt*.75))},null)]};}
+  else if(/(?:putting green|mini golf).*smaller/i.test(instruction)&&(find("putting_green")||find("mini_golf"))){const e=(find("putting_green")||find("mini_golf"))!,bounds=dimensionBounds(e);patch={summary:"Reduce the putting area and its size-based planning estimate.",operations:[update(e,{widthFt:Math.max(bounds.min.widthFt,Math.round(e.size.widthFt*.75)),depthFt:Math.max(bounds.min.depthFt,Math.round(e.size.depthFt*.75))},null)]};}
   else if(/remove.*pergola.*shade sail/i.test(instruction)&&find("pergola"))patch={summary:"Replace the pergola with a shade sail; keep the existing tree.",operations:[{action:"replace",elementId:find("pergola")!.id,catalogItemId:"shade_sail",position:null,dimensions:null}]};
   else if(/(?:add|room for).*(?:hot tub|\bspa\b)/i.test(instruction))patch={summary:"Add a compact spa; review utility and placement warnings.",operations:[{action:"add",catalogItemId:"spa",position:{x:5,y:40},dimensions:null}]};
   else if(/more lawn/i.test(instruction)&&find("patio")){const e=find("patio")!;patch={summary:"Reduce the patio footprint to leave more open yard area. New lawn installation is not included.",operations:[update(e,{widthFt:Math.max(12,e.size.widthFt-4),depthFt:Math.max(10,e.size.depthFt-4)},null)]};}

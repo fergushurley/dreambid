@@ -124,3 +124,5 @@ The December 2026 stretch target requires **402 retained firms** at a mix of 100
 - [Demo runbook](docs/DEMO.md), [submission-ready text](docs/SUBMISSION.md), [commercial strategy](docs/STRATEGY.md), and [development evidence](docs/DEVELOPMENT.md).
 
 A timed video flow/script is included; no recorded video or hosted production service is claimed. Government ingestion, actual site measurement, general collision/engineering analysis, real contractor procurement, authentication and billing remain outside this prototype.
+
+The layout editor now has a **Material view** using authored Blender-rendered lawn, paving, water, tree and furniture assets. **Technical plan** retains measurement overlays. Selected elements support **Rotate 90°**; a rotated fence keeps its installed length and cost, while later resizing updates both. The **Blender / 3D** tab offers a separate high-detail Cycles render, also usable as a reference for AI concept regeneration. See [Blender quality and asset reproduction](docs/BLENDER_QUALITY.md).

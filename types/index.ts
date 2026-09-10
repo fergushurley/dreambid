@@ -78,6 +78,8 @@ export const projectElementSchema = z.object({
   // Optional for compatibility with saved v1 projects. All geometry remains in position/size.
   catalogItemId: z.string().optional(), pricing: featurePriceModelSchema.optional(),
   indicativeRange: priceRangeSchema.optional(),
+  // Clockwise orientation; size always stores the axis-aligned, rotated footprint.
+  rotationDeg: z.union([z.literal(0), z.literal(90), z.literal(180), z.literal(270)]).optional(),
 });
 export type ProjectElement = z.infer<typeof projectElementSchema>;
 export const scopeItemSchema = z.object({
@@ -104,6 +106,7 @@ export const layoutPatchSchema = z.object({
     z.object({ action: z.literal("add"), catalogItemId: z.string(), position: pointSchema.nullable(), dimensions: dimensionsSchema.nullable() }),
     z.object({ action: z.literal("update"), elementId: z.string(), position: pointSchema.nullable(), dimensions: dimensionsSchema.nullable() }),
     z.object({ action: z.literal("remove"), elementId: z.string() }),
+    z.object({ action: z.literal("rotate"), elementId: z.string() }),
     z.object({ action: z.literal("replace"), elementId: z.string(), catalogItemId: z.string(), position: pointSchema.nullable(), dimensions: dimensionsSchema.nullable() }),
   ])).max(20),
 });
@@ -130,7 +133,7 @@ export const projectSpecSchema = z.object({
   elements: z.array(projectElementSchema).min(1).max(40),
   scopeItems: z.array(scopeItemSchema).min(1).max(80), assumptions: z.array(z.string()),
   revisionHistory: z.array(z.object({ version: z.number().int(), instruction: z.string(), summary: z.string(), changes: z.array(z.string()), preserved: z.array(z.string()), createdAt: z.string() })),
-  scene: z.object({ units: z.literal("feet"), camera: z.literal("isometric"), renderUrl: z.string().nullable(), blendFile: z.string().nullable(), renderer: z.enum(["pending", "blender", "fallback"]) }),
+  scene: z.object({ units: z.literal("feet"), camera: z.enum(["isometric", "perspective"]), renderUrl: z.string().nullable(), blendFile: z.string().nullable(), renderer: z.enum(["pending", "blender", "fallback"]), quality: z.enum(["preview", "max"]).optional() }),
   feasibility: feasibilityCheckSchema,
 });
 export type ProjectSpec = z.infer<typeof projectSpecSchema>;

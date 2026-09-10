@@ -23,7 +23,7 @@ export function ProjectVisual({ project, site, view, renderBusy }: {
     ? `AI concept · ${project?.conceptVisual?.source === "live" ? "current layout reference" : "retained reference"} · illustrative`
     : view === "plan" ? "Site plan · preliminary geometry"
     : renderBusy ? "Preparing the exact 3D layout…"
-    : project && imageUrl ? `${project.scene.renderer === "blender" ? "Blender visualization" : "Fallback visualization"} · revision ${project.version}`
+    : project && imageUrl ? `${project.scene.renderer === "blender" ? `Blender ${project.scene.quality === "max" ? "max-quality" : "geometry"} render` : "Fallback visualization"} · revision ${project.version}`
     : project ? "Site plan · preliminary geometry"
     : "Blender fixture · before renovation";
 

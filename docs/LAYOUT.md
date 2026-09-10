@@ -39,7 +39,7 @@ The project range includes unlinked pre-construction work. It can exceed the bud
 
 `/api/visualize` builds/caches the current Blender PNG and sends it to `gpt-image-2` with the full layout, constraints, SiteContext and optional homeowner photos. Images are cached by input content; ProjectSpec stores an optional signature-bound image reference. Changes invalidate it. All three concept cards now use retained AI reference imagery. AI images remain illustrative and can vary from exact dimensions; Blender / 3D and Site plan remain distinct. Runtime images and private input are not committed.
 
-Address autocomplete/validation is the next requested extension; this checkpoint does not yet claim postal validation.
+Address autocomplete/validation was requested and then explicitly deferred. No postal validation is claimed.
 
 ## Verification
 

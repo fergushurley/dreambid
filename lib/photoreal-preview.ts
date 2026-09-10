@@ -3,6 +3,7 @@ import previews from "@/fixtures/photoreal-previews.json";
 
 /** Illustrative AI images are shown only for the geometry they were created from. */
 export function photorealPreview(project: ProjectSpec | null): string | null {
+  if (project?.elements.some(e=>(e.rotationDeg??0)!==0)) return null;
   if (!project || project.siteContextId !== "site-maple-demo") return null;
   const geometry = [
     project.dimensions.widthFt,

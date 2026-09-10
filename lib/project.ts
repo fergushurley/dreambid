@@ -4,7 +4,7 @@ import { canonicalProject, element, scope } from "@/fixtures/project";
 import { checkFeasibility } from "./feasibility";
 
 // Catalog pricing is owned by deterministic code, not generated or edited by Astra.
-const modelElementSchema = projectElementSchema.omit({ catalogItemId: true, pricing: true, indicativeRange: true });
+const modelElementSchema = projectElementSchema.omit({ catalogItemId: true, pricing: true, indicativeRange: true, rotationDeg: true });
 export const projectDraftSchema = z.object({ title: z.string(), homeownerGoals: z.array(z.string()), softConstraints: z.array(z.string()), elements: z.array(modelElementSchema).min(1).max(40), scopeItems: z.array(scopeItemSchema).min(1).max(80), assumptions: z.array(z.string()) });
 
 export function fixtureProject(brief: ProjectBrief, concept: RenovationConcept, site: SiteContext): ProjectSpec {
