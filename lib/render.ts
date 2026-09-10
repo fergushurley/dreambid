@@ -5,14 +5,16 @@ import { spawn } from "node:child_process";
 import path from "node:path";
 import { siteForAddress } from "@/fixtures/site-context";
 import type { ProjectSpec } from "@/types";
+import { visualSignature } from "./visual-signature";
 
 const inFlight = new Map<string, Promise<ProjectSpec["scene"]>>();
 export function blenderExecutable(): string | null {
   return [process.env.BLENDER_PATH, "/Applications/Blender.app/Contents/MacOS/Blender", "/usr/bin/blender", "/opt/homebrew/bin/blender"].find(p => p && existsSync(p)) || null;
 }
-export const RENDERER_VERSION = 6;
+export const RENDERER_VERSION = 7;
 export function sceneHash(project: ProjectSpec, quality: "preview" | "max" = "preview"): string {
-  return createHash("sha256").update(JSON.stringify({ rendererVersion: RENDERER_VERSION, quality, siteContextId: project.siteContextId, dimensions: project.dimensions, elements: project.elements.map(({ id, kind, position, size, material, color, rotationDeg }) => ({ id, kind, position, size, material, color, rotationDeg })) })).digest("hex").slice(0, 20);
+  const site = siteForAddress(project.propertyAddress, project.siteContextId === "site-maple-demo");
+  return createHash("sha256").update(JSON.stringify({ rendererVersion: RENDERER_VERSION, quality, siteContextId: project.siteContextId, residence: site.residence, structures: site.existingStructures, dimensions: project.dimensions, elements: project.elements.map(({ id, kind, position, size, material, color, rotationDeg }) => ({ id, kind, position, size, material, color, rotationDeg })) })).digest("hex").slice(0, 20);
 }
 function fallbackSvg(project: ProjectSpec): string {
   const w = project.dimensions.widthFt, d = project.dimensions.depthFt;
@@ -30,7 +32,7 @@ async function renderOnce(project: ProjectSpec, hash: string, quality: "preview"
   const folder = path.join(process.cwd(), "public", "generated");
   await mkdir(folder, { recursive: true });
   const output = path.join(folder, `${hash}.png`), input = path.join(folder, `${hash}.json`);
-  const scene = { units: "feet" as const, camera: quality === "max" ? "perspective" as const : "isometric" as const, renderUrl: `/generated/${hash}.png`, blendFile: `/generated/${hash}.blend`, renderer: "blender" as const, quality };
+  const scene = { units: "feet" as const, camera: quality === "max" ? "perspective" as const : "isometric" as const, renderUrl: `/generated/${hash}.png`, blendFile: `/generated/${hash}.blend`, renderer: "blender" as const, quality, specSignature: visualSignature(project) };
   // Cache key depends on geometry, never on user-controlled file paths.
   try { if ((await stat(output)).size > 1000) return scene; } catch { /* render missing */ }
   const blender = blenderExecutable();

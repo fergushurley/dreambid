@@ -65,6 +65,9 @@ export function checkFeasibility(input: ProjectSpec, site: SiteContext, repair =
       if (candidate) e.position = candidate;
       result.conflicts.push({ elementId: e.id, rule: "tree_protection", explanation: candidate ? `${e.label} repositioned to preserve the ${tree.protectionRadiusFt} ft tree protection zone.` : `${e.label} overlaps the tree protection zone and needs redesign.`, resolved: !!candidate, before: treeBefore, after: candidate });
     }
+    if (!surfaces.has(e.kind) && !overlays.has(e.kind)) for (const access of site.accessZones ?? []) {
+      if (rectanglesOverlap(e, access)) result.conflicts.push({ elementId: e.id, rule: "door_clearance", explanation: `${e.label} blocks the ${access.label.toLowerCase()} landing. Keep this ${access.size.depthFt} ft access zone clear.`, resolved: false, before: { ...e.position }, after: null });
+    }
     if (!result.conflicts.some(c => c.elementId === e.id && !c.resolved)) result.likelyCompliant.push(`${e.label}: fits the available ${site.isDemo ? "fixture" : "assumed"} geometry${isStructure(e) && side !== null && rear !== null ? " and stated setback envelope" : ""}.`);
   }
   if (!repair) {

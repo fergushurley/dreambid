@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { zodTextFormat } from "openai/helpers/zod";
 import { canonicalBrief, REVISION_PROMPT } from "../fixtures/project";
 import { canonicalSiteContext, siteForAddress } from "../fixtures/site-context";
-import { fallbackConcepts } from "../fixtures/concepts";
+import { fallbackConcepts, featuredConcepts } from "../fixtures/concepts";
 import { featureCatalog } from "../fixtures/feature-catalog";
 import { fixtureProject, projectDraftSchema, revisionPatchSchema } from "../lib/project";
 import { applyLayoutPatch, budgetSummary, priceAtSize } from "../lib/layout";
@@ -51,7 +51,7 @@ test("new scope still normalizes three bids and rejects a bid from before the ed
  assert.throws(()=>normalizeQuotes(next,old),/revision/); const compared=normalizeQuotes(next,syntheticQuotes(next)); assert.equal(compared.length,3); assert.equal(compared[0].normalizedTotal,next.estimatedTotal);
 });
 test("manual layout invalidates a matching concept image and custom addresses have no fixture setbacks", () => {
- const p=base(); assert.ok(photorealPreview(p));
+ const p=fixtureProject(canonicalBrief,featuredConcepts(canonicalBrief).concepts[1],canonicalSiteContext); assert.ok(photorealPreview(p));
  const next=applyLayoutPatch(p,{summary:"Move dining",operations:[{action:"update",elementId:"dining",position:{x:11,y:13},dimensions:null}]},canonicalSiteContext);
  assert.equal(photorealPreview(next),null);
  const site=siteForAddress("123 Any Street, Austin, TX 78701",false); assert.equal(site.rearSetback.value,null); assert.equal(site.existingStructures.length,0);

@@ -48,7 +48,7 @@ mats = {
     'metal': material('brushed steel', (.43, .46, .44), .3, .65),
     'leaf': material('olive foliage', (.24, .36, .15)),
     'lightleaf': material('sunlit foliage', (.39, .48, .23)),
-    'house': material('warm stucco', (.83, .81, .72)),
+    'house': material('off-white lap siding', (.86, .85, .81)),
     'glass': material('blue green glass', (.22, .35, .32), .18, .15),
     'clay': material('terracotta', (.63, .36, .22)),
     'ground': material('studio backdrop', (.82, .84, .77)),
@@ -105,19 +105,13 @@ if HIGH:
     mats['glass'].node_tree.nodes['Principled BSDF'].inputs['Transmission Weight'].default_value=.7
     mats['glass'].node_tree.nodes['Principled BSDF'].inputs['Roughness'].default_value=.06
     realism.fence(W,D,mats,box)
-    realism.house(W,mats,box,spec.get('siteContext'))
 else:
-    # Rear fence, partial side fences and a small, neutral house establish site context.
+    # Lower-detail surroundings; the residence keeps the same SiteContext geometry.
     for y in (D-.2,):
         box('rear fence', (W/2, y, 2.5), (W, .22, 5), mats['house'])
         for x in range(0, int(W)+1, 6): box('fence post', (x, y, 2.65), (.35, .35, 5.3), mats['house'])
     for x in (.2, W-.2): box('side fence', (x, D*.72, 2.5), (.22, D*.56, 5), mats['house'])
-    box('house fragment', (W*.5, -6, 5), (W*.8, 12, 10), mats['house'], .12)
-    box('flat roof coping', (W*.5, -6, 10.2), (W*.82, 12.5, .4), mats['stone'])
-    for x in (W*.29, W*.55):
-        box('sliding door frame', (x, .045, 4.4), (9, .15, 8), mats['dark'], .04)
-        box('sliding door glass', (x, .16, 4.4), (8.5, .10, 7.5), mats['glass'], 0)
-        box('door mullion', (x, .23, 4.4), (.13, .10, 7.5), mats['dark'], 0)
+realism.house(W,mats,box,spec.get('siteContext'),detail=HIGH)
 for e in spec['elements']:
     before_objects=set(bpy.context.scene.objects)
     angle=math.radians(e.get("rotationDeg",0))
@@ -238,8 +232,8 @@ if HIGH:
     scene.world.node_tree.nodes['Background'].inputs['Strength'].default_value=.035
     key.data.energy=2500;key.data.size=45
     camera.data.type='PERSP';camera.data.lens=42
-    camera.location=Vector((-W*.7,D*1.45,D*.83))
-    target=Vector((W*.45,D*.37,3.5));camera.rotation_euler=(target-camera.location).to_track_quat('-Z','Y').to_euler()
+    camera.location=Vector((-W*.82,D*1.52,D*.95))
+    target=Vector((W*.45,D*.30,6));camera.rotation_euler=(target-camera.location).to_track_quat('-Z','Y').to_euler()
     scene.view_settings.look='AgX - Medium High Contrast'
     scene.view_settings.exposure=-.5
 scene.render.resolution_x = 1920 if HIGH else 1280; scene.render.resolution_y = 1280 if HIGH else 960; scene.render.resolution_percentage = 100

@@ -321,8 +321,9 @@
     "source": "AI concept generated from deterministic Blender fixture; not a property photograph"
   },
   {
+    "residenceVersion": "two-story-2000-v1",
     "variant": "meadow-v2",
-    "imageUrl": "/demo/photoreal/meadow-simple.png",
+    "imageUrl": "/demo/photoreal/meadow-simple-two-story.png",
     "geometry": [
       48,
       58,
@@ -426,8 +427,9 @@
     "source": "Retained AI concept reference for curated feature scope; geometry is approximate, not a property photograph. See docs/CONCEPT_TIERS.md for prompts."
   },
   {
+    "residenceVersion": "two-story-2000-v1",
     "variant": "terrace-v2",
-    "imageUrl": "/demo/photoreal/terrace-kitchen.png",
+    "imageUrl": "/demo/photoreal/terrace-kitchen-two-story.png",
     "geometry": [
       48,
       58,
@@ -546,8 +548,9 @@
     "source": "Retained AI concept reference for curated feature scope; geometry is approximate, not a property photograph. See docs/CONCEPT_TIERS.md for prompts."
   },
   {
+    "residenceVersion": "two-story-2000-v1",
     "variant": "retreat-v2",
-    "imageUrl": "/demo/photoreal/retreat-pool.png",
+    "imageUrl": "/demo/photoreal/retreat-pool-two-story.png",
     "geometry": [
       48,
       58,

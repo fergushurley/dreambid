@@ -1,9 +1,10 @@
 import type { ProjectSpec } from "@/types";
 import previews from "@/fixtures/photoreal-previews.json";
+import { DEMO_RESIDENCE_VERSION, DEMO_ADDRESS } from "@/fixtures/site-context";
 
 /** Illustrative AI images are shown only for the geometry they were created from. */
 export function photorealPreview(project: ProjectSpec | null): string | null {
-  if (!project || project.siteContextId !== "site-maple-demo") return null;
+  if (!project || project.siteContextId !== "site-maple-demo" || project.propertyAddress !== DEMO_ADDRESS) return null;
   const geometry = [
     project.dimensions.widthFt,
     project.dimensions.depthFt,
@@ -14,6 +15,7 @@ export function photorealPreview(project: ProjectSpec | null): string | null {
   ];
   const signature = JSON.stringify(geometry);
   return previews.find(preview => {
+    if (!("residenceVersion" in preview) || preview.residenceVersion !== DEMO_RESIDENCE_VERSION) return false;
     if (JSON.stringify(preview.geometry) !== signature) return false;
     const rotations = ("rotations" in preview ? preview.rotations : undefined) ?? project.elements.map(e=>[e.id,0]);
     return JSON.stringify(rotations.slice().sort()) === JSON.stringify(project.elements.map(e=>[e.id,e.rotationDeg??0]).sort());

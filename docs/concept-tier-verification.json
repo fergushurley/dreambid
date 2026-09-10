@@ -1,7 +1,7 @@
 [
   {
     "concept": "The simple refresh",
-    "imageUrl": "/demo/photoreal/meadow-simple.png",
+    "imageUrl": "/demo/photoreal/meadow-simple-two-story.png",
     "range": {
       "low": 12330,
       "high": 16680
@@ -38,7 +38,7 @@
   },
   {
     "concept": "The kitchen terrace",
-    "imageUrl": "/demo/photoreal/terrace-kitchen.png",
+    "imageUrl": "/demo/photoreal/terrace-kitchen-two-story.png",
     "range": {
       "low": 36470,
       "high": 49340
@@ -79,7 +79,7 @@
   },
   {
     "concept": "The poolside retreat",
-    "imageUrl": "/demo/photoreal/retreat-pool.png",
+    "imageUrl": "/demo/photoreal/retreat-pool-two-story.png",
     "range": {
       "low": 108660,
       "high": 159350

@@ -59,23 +59,50 @@ def grasses(x,y,w,d,mats,count=700,height=1.5):
         j=len(verts);verts.extend([(px-dy*b,py+dx*b,.4),(px+dy*b,py-dx*b,.4),(px+dx*.24,py+dy*.24,h*.65+.4),(px+dx*.6,py+dy*.6,h+.4)]);faces.extend([(j,j+1,j+2),(j,j+2,j+3)]);indices.extend([i%len(mats)]*2)
     mesh('Individual ornamental grass blades',verts,faces,mats,indices)
 
-def house(W,mats,box,site=None):
+def house(W,mats,box,site=None,detail=True):
     known=next((e for e in (site or {}).get('existingStructures',[]) if e['kind']=='house'),None)
     x=known['position']['x'] if known else W*.1;y=known['position']['y'] if known else -25
-    w=known['widthFt'] if known else W*.8;d=known['depthFt'] if known else 25;front=y+d;h=10
+    w=known['widthFt'] if known else W*.8;d=known['depthFt'] if known else 25;front=y+d
+    stories=(site or {}).get('residence',{}).get('stories',{}).get('value')
+    stories=int(stories) if isinstance(stories,(int,float)) and 1<=stories<=3 else 1
+    h=10*stories
+    box('existing home foundation',(x+w/2,y+d/2,-.45),(w,d,.9),mats['stone'],.03)
     box('house footprint from site context',(x+w/2,y+d/2,h/2),(w,d,h),mats['house'],.06)
     # Roof, heights and finishes are illustrative, never extracted property facts.
-    roof=mats['dark'];texture(roof,70,.03,.25)
+    roof=mats['dark']
+    if detail:texture(roof,70,.03,.25)
     verts=[(x-.6,y-.6,h),(x+w+.6,y-.6,h),(x+w+.6,front+.6,h),(x-.6,front+.6,h),(x-.6,y+d/2,h+5),(x+w+.6,y+d/2,h+5)]
     mesh('Gabled roof, assumed architectural detail',verts,[(0,1,5,4),(4,5,2,3),(0,4,3),(1,2,5)],[roof,mats['house']],[0,0,1,1])
-    for row in range(20):box('horizontal lap siding',(x+w/2,front+.015,.25+row*.49),(w,.075,.46),mats['house'],.015)
+    if detail:
+        for row in range(stories*20):
+            z=.25+row*.5
+            box('rear horizontal lap siding',(x+w/2,front+.015,z),(w,.075,.47),mats['house'],.012)
+            box('side horizontal lap siding',(x-.015,y+d/2,z),(.075,d,.47),mats['house'],.012)
     for px in (x+w*.27,x+w*.7):
         box('sliding door black frame',(px,front+.12,4.1),(8,.17,7.8),mats['dark'],.03)
         box('warm interior visible through glass',(px,front+.23,4.1),(7.65,.07,7.45),mats['linen'],0)
         box('architectural glazing',(px,front+.30,4.1),(7.55,.07,7.35),mats['glass'],0)
         box('door center mullion',(px,front+.36,4.1),(.1,.08,7.6),mats['dark'],.01)
         for end in (-1,1):box('door handle',(px+end*.19,front+.43,4.2),(.08,.12,.85),mats['metal'],.02)
-    for px in (x+.2,x+w-.2):box('corner trim',(px,front+.10,5),(.28,.13,10),mats['linen'],.02)
+    # Standard residential windows, not a second bank of floor-to-ceiling patio doors.
+    def window(cx,cy,z,side=False):
+        def part(name,across,out,height,width,thick,tall,mat):
+            center=(cx-out,cy+across,z+height) if side else (cx+across,cy+out,z+height)
+            size=(thick,width,tall) if side else (width,thick,tall)
+            box(name,center,size,mat,.015)
+        part('white double-hung window casing',0,.14,0,3.5,.20,5,mats['linen'])
+        part('window glazing',0,.27,0,3.12,.09,4.62,mats['glass'])
+        part('window center sash',0,.33,0,3.2,.09,.12,mats['linen'])
+        part('window vertical muntin',0,.33,0,.065,.09,4.6,mats['linen'])
+        part('window sill',0,.32,-2.5,3.7,.38,.16,mats['linen'])
+    for floor in range(1,stories):
+        for fraction in (.14,.38,.62,.86):window(x+w*fraction,front,10*floor+5)
+    for floor in range(stories):
+        for fraction in (.28,.72):window(x,y+d*fraction,10*floor+5,True)
+    for px in (x+.2,x+w-.2):box('corner trim',(px,front+.10,h/2),(.28,.13,h),mats['linen'],.02)
+    box('rear eave fascia',(x+w/2,front+.45,h-.12),(w+1.2,.25,.4),mats['linen'],.02)
+    box('rear rain gutter',(x+w/2,front+.62,h-.23),(w+1.2,.23,.22),mats['linen'],.035)
+    box('downspout',(x+w-.3,front+.2,h/2),(.17,.19,h-.25),mats['linen'],.02)
     for px in (x+1,x+w*.49,x+w-1):
         box('wall sconce',(px,front+.35,7),(.45,.45,.8),mats['dark'],.06)
         bpy.ops.object.light_add(type='AREA',location=(px,front+.65,6.8));light=bpy.context.object;light.data.energy=45;light.data.color=(1,.68,.38);light.data.size=.5;light.rotation_euler=(0,0,0)

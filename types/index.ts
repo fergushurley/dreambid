@@ -45,6 +45,9 @@ export const siteContextSchema = z.object({
   parcelIdentifier: siteContextFactSchema, jurisdiction: siteContextFactSchema,
   zoningDistrict: siteContextFactSchema, lotWidth: siteContextFactSchema, lotDepth: siteContextFactSchema,
   lotArea: siteContextFactSchema, houseFootprint: siteContextFactSchema,
+  // Optional so older saved projects remain readable; never infer these for a new address.
+  residence: z.object({ floorArea: siteContextFactSchema, stories: siteContextFactSchema, yearBuilt: siteContextFactSchema, appearance: siteContextFactSchema }).optional(),
+  accessZones: z.array(z.object({ id: shortText, label: shortText, position: pointSchema, size: dimensionsSchema, fact: siteContextFactSchema })).optional(),
   rearSetback: siteContextFactSchema, sideSetback: siteContextFactSchema,
   heightLimit: siteContextFactSchema, lotCoverageLimit: siteContextFactSchema,
   accessoryStructureRules: siteContextFactSchema,
@@ -133,7 +136,7 @@ export const projectSpecSchema = z.object({
   elements: z.array(projectElementSchema).min(1).max(40),
   scopeItems: z.array(scopeItemSchema).min(1).max(80), assumptions: z.array(z.string()),
   revisionHistory: z.array(z.object({ version: z.number().int(), instruction: z.string(), summary: z.string(), changes: z.array(z.string()), preserved: z.array(z.string()), createdAt: z.string() })),
-  scene: z.object({ units: z.literal("feet"), camera: z.enum(["isometric", "perspective"]), renderUrl: z.string().nullable(), blendFile: z.string().nullable(), renderer: z.enum(["pending", "blender", "fallback"]), quality: z.enum(["preview", "max"]).optional() }),
+  scene: z.object({ units: z.literal("feet"), camera: z.enum(["isometric", "perspective"]), renderUrl: z.string().nullable(), blendFile: z.string().nullable(), renderer: z.enum(["pending", "blender", "fallback"]), quality: z.enum(["preview", "max"]).optional(), specSignature: z.string().optional() }),
   feasibility: feasibilityCheckSchema,
 });
 export type ProjectSpec = z.infer<typeof projectSpecSchema>;
