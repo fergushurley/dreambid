@@ -5,7 +5,7 @@ import { readBody,apiError } from "@/lib/http";
 import { siteForAddress } from "@/fixtures/site-context";
 import { generateConceptVisual } from "@/lib/concept-visual";
 export const runtime="nodejs";
-export const maxDuration=240;
+export const maxDuration=300;
 export async function POST(request:Request){try{
  const {project,photos,demoMode}=await readBody(request,z.object({project:projectSpecSchema,photos:projectBriefSchema.shape.photos.default([]),demoMode:z.boolean()}));
  const site=siteForAddress(project.propertyAddress,project.siteContextId==="site-maple-demo");
