@@ -1,7 +1,7 @@
 import type { ProjectSpec } from "@/types";
 import { DEMO_ADDRESS, DEMO_RESIDENCE_VERSION } from "@/fixtures/site-context";
 import previews from "@/fixtures/blender-previews.json";
-import { visualSignature } from "./visual-signature";
+import { currentConceptImage, visualSignature } from "./visual-signature";
 
 /** The same geometry key gates every retained deterministic view. Budget/prose do not move objects. */
 export function sceneGeometryKey(project: ProjectSpec): string {
@@ -15,4 +15,14 @@ export function matchingScene(project: ProjectSpec | null): { imageUrl: string; 
   if (project.siteContextId !== "site-maple-demo" || project.propertyAddress !== DEMO_ADDRESS) return null;
   const preview=(previews as {imageUrl:string;geometryKey:string}[]).find(p=>p.geometryKey===sceneGeometryKey(project));
   return preview ? {imageUrl:preview.imageUrl,quality:"max",source:"retained"} : null;
+}
+
+/** AI finishing uses a Blender reference, but dimensional authority remains the site plan. */
+export function layoutConceptImage(project: ProjectSpec | null): string | null {
+  if (!project) return null;
+  const generated=currentConceptImage(project);
+  if(generated && project.conceptVisual?.grounding?.primary === "demo_geometry")return generated;
+  if(project.siteContextId !== "site-maple-demo" || project.propertyAddress !== DEMO_ADDRESS)return null;
+  const preview=(previews as {geometryKey:string;finishImageUrl?:string}[]).find(p=>p.geometryKey===sceneGeometryKey(project));
+  return preview?.finishImageUrl ?? null;
 }

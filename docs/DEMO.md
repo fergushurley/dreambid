@@ -20,7 +20,7 @@ Brief:
 
 > Make this backyard a great space for entertaining. My budget is $50,000. Keep the mature tree. Add dining, shade and better lighting.
 
-Select the middle concept: **The kitchen terrace**. Its selected scope is **$42,900**, with a preliminary installed range of **$36,470–$49,340**. Kitchens are included in options two and three; the poolside option is **$108,660–$159,350** and visibly exceeds a $50,000 cap.
+Select the middle concept: **The kitchen terrace**. This opens **Customize layout** directly as step 3. Choose **Use this layout** to preview the design and continue to quotes. Its selected scope is **$42,900**, with a preliminary installed range of **$36,470–$49,340**. Kitchens are included in options two and three; the poolside option is **$108,660–$159,350** and visibly exceeds a $50,000 cap.
 
 Revision:
 
@@ -87,4 +87,4 @@ Normalized-price rank: A, C, B. Recommendation: A. The seemingly cheapest C cost
 
 The original canonical fixture remains covered by regression tests. The current cards use a simple gravel/shade-sail refresh, a kitchen terrace and a pool/kitchen/lounge transformation. The card images, header rows and prices align. Selection keeps the card's scope and planning range unchanged. The canonical pergola-to-kitchen revision now upgrades the compact kitchen while removing the pergola; the final $42,900 quote comparison remains unchanged.
 
-Demonstrate the Material view/Technical plan toggle, select a fence and use **Rotate 90°**, then show that the footprint and warnings change without changing installed length or price. The homepage's property view is an actual high-detail Blender model of a fictional property. AI concept references, Blender models and homeowner photos have distinct labels.
+Demonstrate the Material view/Technical plan toggle, select a fence and use **Rotate 90°**, then show that the footprint and warnings change without changing installed length or price. The homepage's default property view is an explicitly labeled AI image of the fictional property; its separate Blender tab shows deterministic geometry. AI concept references, Blender models and homeowner photos have distinct labels.

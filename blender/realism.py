@@ -131,3 +131,38 @@ def sail(x,y,w,d,h,mats,pole):
             a=i*(n+1)+j;faces.append((a,a+1,a+n+2,a+n+1))
     obj=mesh('Tensioned fabric shade sail',verts,faces,[mats['linen']]);solid=obj.modifiers.new('Fabric thickness','SOLIDIFY');solid.thickness=.02
     for p in obj.data.polygons:p.use_smooth=True
+
+def lawn_blades(W,D,elements,mats,count=55000):
+    """Short grass within the existing lawn only; keeps every scoped footprint untouched."""
+    excluded=[(e['position']['x'],e['position']['y'],e['size']['widthFt'],e['size']['depthFt']) for e in elements if e['kind'] in ('patio','pavers','deck','path','pool','plunge_pool','sport_court','putting_green','mini_golf')]
+    verts=[];faces=[];indices=[]
+    for i in range(count):
+        x=random.uniform(.3,W-.3);y=random.uniform(.3,D-.3)
+        if any(a<=x<=a+w and b<=y<=b+d for a,b,w,d in excluded):continue
+        h=random.uniform(.035,.13);a=random.random()*math.tau;dx=math.cos(a)*.025;dy=math.sin(a)*.025;j=len(verts)
+        verts.extend([(x-dx,y-dy,.06),(x+dx,y+dy,.06),(x+dx*1.7,y+dy*1.7,h+.06)]);faces.append((j,j+1,j+2));indices.append(i%len(mats))
+    mesh('Fine cut lawn blades',verts,faces,mats,indices)
+
+def gravel(x,y,w,d,mats):
+    verts=[];faces=[];indices=[]
+    for i in range(int(w*d*17)):
+        px=x+random.random()*w;py=y+random.random()*d;r=random.uniform(.025,.07);j=len(verts)
+        verts.extend([(px-r,py-r,.25),(px+r,py-r,.25),(px+r,py+r,.25),(px-r,py+r,.25),(px,py,.25+r)])
+        faces.extend([(j,j+1,j+4),(j+1,j+2,j+4),(j+2,j+3,j+4),(j+3,j,j+4)]);indices.extend([i%len(mats)]*4)
+    mesh('Fine pea gravel aggregate',verts,faces,mats,indices)
+
+def planted_border(x,y,w,d,h,mats):
+    # Planting density and flowers stay inside the selected planting bed.
+    centers=[]
+    for i in range(max(3,int(w*d/3))):
+        centers.append((x+random.uniform(.3,max(.31,w-.3)),y+random.uniform(.3,max(.31,d-.3)),random.uniform(.8,max(.81,h*.55)),.55,.55,.55))
+    leaf_cloud('Layered border foliage',centers,len(centers)*240,[mats['leaf'],mats['lightleaf']],.14)
+    grasses(x,y,w,d,[mats['leaf'],mats['lightleaf']],int(w*d*20),h*.8)
+    leaf_cloud('Small flowering border accents',[(cx,cy,cz+.4,rx*.3,ry*.3,.18) for cx,cy,cz,rx,ry,rz in centers[::3]],max(50,len(centers)*15),[mats['linen']],.045)
+
+def garden_surroundings(W,D,mats,pole):
+    # Fictional off-site foliage gives the demo a neighborhood setting, not a grey studio stage.
+    for x,y,h,w in [(-12,-10,27,17),(-14,20,23,14),(W+13,-16,30,19),(W+16,12,26,16),(-8,-38,28,17),(W+8,-38,29,18)]:
+        pole('off-site tree trunk',(x,y,0),(x-.3,y,h*.75),.55,mats['wood'])
+        centers=[(x+math.cos(i*math.tau/7)*w*.22,y+math.sin(i*math.tau/7)*w*.22,h*.78+random.uniform(-2,2),w*.27,w*.27,h*.18) for i in range(7)]
+        leaf_cloud('off-site canopy',centers,9000,[mats['leaf'],mats['lightleaf']],.23)

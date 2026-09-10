@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { propertyContextSchema } from "./property";
 
 const money = z.number().finite().nonnegative().max(10000000);
 const shortText = z.string().min(1).max(2000);
@@ -42,6 +43,7 @@ export const budgetSummarySchema = z.object({ range: priceRangeSchema, planningT
 export type BudgetSummary = z.infer<typeof budgetSummarySchema>;
 export const siteContextSchema = z.object({
   id: shortText, propertyAddress: shortText, isDemo: z.boolean(),
+  propertyContext: propertyContextSchema.optional(),
   parcelIdentifier: siteContextFactSchema, jurisdiction: siteContextFactSchema,
   zoningDistrict: siteContextFactSchema, lotWidth: siteContextFactSchema, lotDepth: siteContextFactSchema,
   lotArea: siteContextFactSchema, houseFootprint: siteContextFactSchema,
@@ -132,7 +134,7 @@ export const projectSpecSchema = z.object({
   hardConstraints: z.array(z.string()), softConstraints: z.array(z.string()),
   budgetTarget: money, budgetMaximum: money,
   estimatedTotal: money, spaceType: z.literal("backyard"), dimensions: dimensionsSchema,
-  conceptVisual: z.object({ imageUrl: z.string(), specSignature: z.string(), model: z.string(), createdAt: z.string(), source: z.enum(["live", "reference"]), disclaimer: z.string() }).optional(),
+  conceptVisual: z.object({ imageUrl: z.string(), specSignature: z.string(), model: z.string(), createdAt: z.string(), source: z.enum(["live", "reference"]), disclaimer: z.string(), grounding: z.object({ primary: z.enum(["homeowner_photo", "public_aerial", "demo_geometry"]), propertyAddress: z.string(), inputs: z.array(z.object({ source: z.string(), sha256: z.string(), capturedAt: z.string().nullable() })) }).optional() }).optional(),
   elements: z.array(projectElementSchema).min(1).max(40),
   scopeItems: z.array(scopeItemSchema).min(1).max(80), assumptions: z.array(z.string()),
   revisionHistory: z.array(z.object({ version: z.number().int(), instruction: z.string(), summary: z.string(), changes: z.array(z.string()), preserved: z.array(z.string()), createdAt: z.string() })),

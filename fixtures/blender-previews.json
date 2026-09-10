@@ -2,7 +2,8 @@
   {
     "variant": "meadow-v2",
     "imageUrl": "/demo/meadow-layout.png",
-    "geometryKey": "{\"site\":\"site-maple-demo\",\"address\":\"24 Maple Lane, Montclair, NJ · demo property\",\"residence\":\"two-story-2000-v1\",\"dimensions\":{\"widthFt\":48,\"depthFt\":58},\"elements\":[[\"dining\",\"dining\",\"Simple dining for six\",{\"x\":10,\"y\":13},{\"widthFt\":8,\"depthFt\":5,\"heightFt\":2.5},\"Teak and linen\",\"#b89670\",0],[\"lights\",\"lighting\",\"Warm landscape lighting\",{\"x\":8,\"y\":8},{\"widthFt\":18,\"depthFt\":12,\"heightFt\":8},\"Warm LED · 2700K\",\"#eacb86\",0],[\"patio\",\"patio\",\"Compact gravel terrace\",{\"x\":7,\"y\":7},{\"widthFt\":20,\"depthFt\":14,\"heightFt\":0.25},\"Compacted gravel\",\"#c7bea6\",0],[\"pergola\",\"shade_sail\",\"Simple fabric shade sail\",{\"x\":9,\"y\":10},{\"widthFt\":12,\"depthFt\":10,\"heightFt\":9},\"Off-white tensioned fabric on slender posts\",\"#e0d9c6\",0],[\"planting\",\"planter\",\"Soft perimeter planting\",{\"x\":8,\"y\":23},{\"widthFt\":12,\"depthFt\":3,\"heightFt\":2},\"Native grasses and terracotta\",\"#7a8962\",0],[\"tree\",\"tree\",\"Mature oak · retained\",{\"x\":38,\"y\":41},{\"widthFt\":12,\"depthFt\":12,\"heightFt\":23},\"Existing mature oak\",\"#647755\",0]]}",
+    "finishImageUrl": "/demo/photoreal/meadow-layout-finish.png",
+    "geometryKey": "{\"site\":\"site-maple-demo\",\"address\":\"24 Maple Lane, Montclair, NJ \u00b7 demo property\",\"residence\":\"two-story-2000-v1\",\"dimensions\":{\"widthFt\":48,\"depthFt\":58},\"elements\":[[\"dining\",\"dining\",\"Simple dining for six\",{\"x\":10,\"y\":13},{\"widthFt\":8,\"depthFt\":5,\"heightFt\":2.5},\"Teak and linen\",\"#b89670\",0],[\"lights\",\"lighting\",\"Warm landscape lighting\",{\"x\":8,\"y\":8},{\"widthFt\":18,\"depthFt\":12,\"heightFt\":8},\"Warm LED \u00b7 2700K\",\"#eacb86\",0],[\"patio\",\"patio\",\"Compact gravel terrace\",{\"x\":7,\"y\":7},{\"widthFt\":20,\"depthFt\":14,\"heightFt\":0.25},\"Compacted gravel\",\"#c7bea6\",0],[\"pergola\",\"shade_sail\",\"Simple fabric shade sail\",{\"x\":9,\"y\":10},{\"widthFt\":12,\"depthFt\":10,\"heightFt\":9},\"Off-white tensioned fabric on slender posts\",\"#e0d9c6\",0],[\"planting\",\"planter\",\"Soft perimeter planting\",{\"x\":8,\"y\":23},{\"widthFt\":12,\"depthFt\":3,\"heightFt\":2},\"Native grasses and terracotta\",\"#7a8962\",0],[\"tree\",\"tree\",\"Mature oak \u00b7 retained\",{\"x\":38,\"y\":41},{\"widthFt\":12,\"depthFt\":12,\"heightFt\":23},\"Existing mature oak\",\"#647755\",0]]}",
     "renderer": "Blender Cycles",
     "quality": "max",
     "residence": {
@@ -51,13 +52,14 @@
         "note": "Illustrative year-2000 suburban house character. Eaves 20 ft and ridge 25 ft are modeling assumptions."
       }
     },
-    "durationSeconds": 150,
+    "durationSeconds": 0,
     "source": "Deterministic render of this exact ProjectSpec; fixture geometry, illustrative finishes."
   },
   {
     "variant": "terrace-v2",
     "imageUrl": "/demo/terrace-layout.png",
-    "geometryKey": "{\"site\":\"site-maple-demo\",\"address\":\"24 Maple Lane, Montclair, NJ · demo property\",\"residence\":\"two-story-2000-v1\",\"dimensions\":{\"widthFt\":48,\"depthFt\":58},\"elements\":[[\"dining\",\"dining\",\"Dining for eight\",{\"x\":10,\"y\":13},{\"widthFt\":10,\"depthFt\":6,\"heightFt\":2.5},\"Teak and linen\",\"#b89670\",0],[\"kitchen\",\"kitchen\",\"Compact outdoor kitchen\",{\"x\":20,\"y\":23},{\"widthFt\":8,\"depthFt\":3,\"heightFt\":3.2},\"Stone countertop, cabinetry and stainless grill\",\"#b9ad92\",0],[\"lights\",\"lighting\",\"Warm landscape lighting\",{\"x\":8,\"y\":8},{\"widthFt\":27,\"depthFt\":21,\"heightFt\":8},\"Warm LED · 2700K\",\"#eacb86\",0],[\"patio\",\"patio\",\"Limestone terrace\",{\"x\":7,\"y\":7},{\"widthFt\":22,\"depthFt\":20,\"heightFt\":0.25},\"Limestone pavers\",\"#d4c8af\",0],[\"pergola\",\"pergola\",\"Cedar pergola\",{\"x\":9,\"y\":10},{\"widthFt\":12,\"depthFt\":12,\"heightFt\":9},\"Natural cedar\",\"#a68059\",0],[\"planting\",\"planter\",\"Soft perimeter planting\",{\"x\":39,\"y\":8},{\"widthFt\":3,\"depthFt\":22,\"heightFt\":2},\"Native grasses and terracotta\",\"#7a8962\",0],[\"tree\",\"tree\",\"Mature oak · retained\",{\"x\":38,\"y\":41},{\"widthFt\":12,\"depthFt\":12,\"heightFt\":23},\"Existing mature oak\",\"#647755\",0]]}",
+    "finishImageUrl": "/demo/photoreal/terrace-layout-finish.png",
+    "geometryKey": "{\"site\":\"site-maple-demo\",\"address\":\"24 Maple Lane, Montclair, NJ \u00b7 demo property\",\"residence\":\"two-story-2000-v1\",\"dimensions\":{\"widthFt\":48,\"depthFt\":58},\"elements\":[[\"dining\",\"dining\",\"Dining for eight\",{\"x\":10,\"y\":13},{\"widthFt\":10,\"depthFt\":6,\"heightFt\":2.5},\"Teak and linen\",\"#b89670\",0],[\"kitchen\",\"kitchen\",\"Compact outdoor kitchen\",{\"x\":20,\"y\":23},{\"widthFt\":8,\"depthFt\":3,\"heightFt\":3.2},\"Stone countertop, cabinetry and stainless grill\",\"#b9ad92\",0],[\"lights\",\"lighting\",\"Warm landscape lighting\",{\"x\":8,\"y\":8},{\"widthFt\":27,\"depthFt\":21,\"heightFt\":8},\"Warm LED \u00b7 2700K\",\"#eacb86\",0],[\"patio\",\"patio\",\"Limestone terrace\",{\"x\":7,\"y\":7},{\"widthFt\":22,\"depthFt\":20,\"heightFt\":0.25},\"Limestone pavers\",\"#d4c8af\",0],[\"pergola\",\"pergola\",\"Cedar pergola\",{\"x\":9,\"y\":10},{\"widthFt\":12,\"depthFt\":12,\"heightFt\":9},\"Natural cedar\",\"#a68059\",0],[\"planting\",\"planter\",\"Soft perimeter planting\",{\"x\":39,\"y\":8},{\"widthFt\":3,\"depthFt\":22,\"heightFt\":2},\"Native grasses and terracotta\",\"#7a8962\",0],[\"tree\",\"tree\",\"Mature oak \u00b7 retained\",{\"x\":38,\"y\":41},{\"widthFt\":12,\"depthFt\":12,\"heightFt\":23},\"Existing mature oak\",\"#647755\",0]]}",
     "renderer": "Blender Cycles",
     "quality": "max",
     "residence": {
@@ -106,13 +108,13 @@
         "note": "Illustrative year-2000 suburban house character. Eaves 20 ft and ridge 25 ft are modeling assumptions."
       }
     },
-    "durationSeconds": 231,
+    "durationSeconds": 0,
     "source": "Deterministic render of this exact ProjectSpec; fixture geometry, illustrative finishes."
   },
   {
     "variant": "retreat-v2",
     "imageUrl": "/demo/retreat-layout.png",
-    "geometryKey": "{\"site\":\"site-maple-demo\",\"address\":\"24 Maple Lane, Montclair, NJ · demo property\",\"residence\":\"two-story-2000-v1\",\"dimensions\":{\"widthFt\":48,\"depthFt\":58},\"elements\":[[\"dining\",\"dining\",\"Dining for eight\",{\"x\":10,\"y\":13},{\"widthFt\":10,\"depthFt\":6,\"heightFt\":2.5},\"Teak and linen\",\"#b89670\",0],[\"kitchen\",\"kitchen\",\"Full outdoor kitchen\",{\"x\":27,\"y\":20},{\"widthFt\":12,\"depthFt\":4,\"heightFt\":3.2},\"Stone countertop, cabinetry and stainless grill\",\"#b9ad92\",0],[\"lights\",\"lighting\",\"Warm landscape lighting\",{\"x\":8,\"y\":8},{\"widthFt\":27,\"depthFt\":21,\"heightFt\":8},\"Warm LED · 2700K\",\"#eacb86\",0],[\"lounge\",\"lounge\",\"Integrated lounge\",{\"x\":23,\"y\":27},{\"widthFt\":10,\"depthFt\":4,\"heightFt\":3},\"Stone and linen\",\"#c4b7a0\",0],[\"patio\",\"patio\",\"Expanded sandstone terrace\",{\"x\":7,\"y\":7},{\"widthFt\":32,\"depthFt\":26,\"heightFt\":0.25},\"Premium sandstone\",\"#d4c8af\",0],[\"pergola\",\"pergola\",\"Architectural charcoal pergola\",{\"x\":9,\"y\":10},{\"widthFt\":18,\"depthFt\":14,\"heightFt\":9},\"Charcoal-painted timber\",\"#434943\",0],[\"planting\",\"planter\",\"Soft perimeter planting\",{\"x\":39,\"y\":8},{\"widthFt\":3,\"depthFt\":22,\"heightFt\":2},\"Native grasses and terracotta\",\"#7a8962\",0],[\"pool\",\"pool\",\"Swimming pool\",{\"x\":6,\"y\":35},{\"widthFt\":24,\"depthFt\":12,\"heightFt\":1},\"Blue water and pale stone coping\",\"#73bfc8\",90],[\"tree\",\"tree\",\"Mature oak · retained\",{\"x\":38,\"y\":41},{\"widthFt\":12,\"depthFt\":12,\"heightFt\":23},\"Existing mature oak\",\"#647755\",0]]}",
+    "geometryKey": "{\"site\":\"site-maple-demo\",\"address\":\"24 Maple Lane, Montclair, NJ \u00b7 demo property\",\"residence\":\"two-story-2000-v1\",\"dimensions\":{\"widthFt\":48,\"depthFt\":58},\"elements\":[[\"dining\",\"dining\",\"Dining for eight\",{\"x\":10,\"y\":13},{\"widthFt\":10,\"depthFt\":6,\"heightFt\":2.5},\"Teak and linen\",\"#b89670\",0],[\"kitchen\",\"kitchen\",\"Full outdoor kitchen\",{\"x\":27,\"y\":20},{\"widthFt\":12,\"depthFt\":4,\"heightFt\":3.2},\"Stone countertop, cabinetry and stainless grill\",\"#b9ad92\",0],[\"lights\",\"lighting\",\"Warm landscape lighting\",{\"x\":8,\"y\":8},{\"widthFt\":27,\"depthFt\":21,\"heightFt\":8},\"Warm LED \u00b7 2700K\",\"#eacb86\",0],[\"lounge\",\"lounge\",\"Integrated lounge\",{\"x\":23,\"y\":27},{\"widthFt\":10,\"depthFt\":4,\"heightFt\":3},\"Stone and linen\",\"#c4b7a0\",0],[\"patio\",\"patio\",\"Expanded sandstone terrace\",{\"x\":7,\"y\":7},{\"widthFt\":32,\"depthFt\":26,\"heightFt\":0.25},\"Premium sandstone\",\"#d4c8af\",0],[\"pergola\",\"pergola\",\"Architectural charcoal pergola\",{\"x\":9,\"y\":10},{\"widthFt\":18,\"depthFt\":14,\"heightFt\":9},\"Charcoal-painted timber\",\"#434943\",0],[\"planting\",\"planter\",\"Soft perimeter planting\",{\"x\":39,\"y\":8},{\"widthFt\":3,\"depthFt\":22,\"heightFt\":2},\"Native grasses and terracotta\",\"#7a8962\",0],[\"pool\",\"pool\",\"Swimming pool\",{\"x\":6,\"y\":35},{\"widthFt\":24,\"depthFt\":12,\"heightFt\":1},\"Blue water and pale stone coping\",\"#73bfc8\",90],[\"tree\",\"tree\",\"Mature oak \u00b7 retained\",{\"x\":38,\"y\":41},{\"widthFt\":12,\"depthFt\":12,\"heightFt\":23},\"Existing mature oak\",\"#647755\",0]]}",
     "renderer": "Blender Cycles",
     "quality": "max",
     "residence": {
@@ -161,7 +163,8 @@
         "note": "Illustrative year-2000 suburban house character. Eaves 20 ft and ridge 25 ft are modeling assumptions."
       }
     },
-    "durationSeconds": 196,
-    "source": "Deterministic render of this exact ProjectSpec; fixture geometry, illustrative finishes."
+    "durationSeconds": 256,
+    "source": "Deterministic render of this exact ProjectSpec; fixture geometry, illustrative finishes.",
+    "finishImageUrl": "/demo/photoreal/retreat-layout-finish.png"
   }
 ]

@@ -11,7 +11,7 @@ const inFlight = new Map<string, Promise<ProjectSpec["scene"]>>();
 export function blenderExecutable(): string | null {
   return [process.env.BLENDER_PATH, "/Applications/Blender.app/Contents/MacOS/Blender", "/usr/bin/blender", "/opt/homebrew/bin/blender"].find(p => p && existsSync(p)) || null;
 }
-export const RENDERER_VERSION = 7;
+export const RENDERER_VERSION = 8;
 export function sceneHash(project: ProjectSpec, quality: "preview" | "max" = "preview"): string {
   const site = siteForAddress(project.propertyAddress, project.siteContextId === "site-maple-demo");
   return createHash("sha256").update(JSON.stringify({ rendererVersion: RENDERER_VERSION, quality, siteContextId: project.siteContextId, residence: site.residence, structures: site.existingStructures, dimensions: project.dimensions, elements: project.elements.map(({ id, kind, position, size, material, color, rotationDeg }) => ({ id, kind, position, size, material, color, rotationDeg })) })).digest("hex").slice(0, 20);

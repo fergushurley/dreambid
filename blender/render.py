@@ -97,14 +97,16 @@ def tree_at(x, y, height=23, width=12):
 W, D = spec['dimensions']['widthFt'], spec['dimensions']['depthFt']
 box('site earth slab', (W/2, D/2, -.7), (W, D, 1.25), mats['earth'], .18)
 box('lawn', (W/2, D/2, -.035), (W, D, .15), mats['grass'], .1)
-box('backdrop', (W/2, D/2, -1.7), (2000, 2000, 1), mats['ground'], 0)
+box('surrounding landscape' if HIGH else 'backdrop', (W/2, D/2, -.09 if HIGH else -1.7), (2000, 2000, .1 if HIGH else 1), mats['grass'] if HIGH else mats['ground'], 0)
 if HIGH:
-    mats['grass'].node_tree.nodes['Principled BSDF'].inputs['Base Color'].default_value=(.07,.16,.035,1)
+    mats['grass'].node_tree.nodes['Principled BSDF'].inputs['Base Color'].default_value=(.095,.20,.045,1)
     for key in ('grass','wood','teak','stone','house','linen','earth'):
         realism.texture(mats[key], 100 if key=='grass' else 12, .05, .35 if key=='grass' else .16)
     mats['glass'].node_tree.nodes['Principled BSDF'].inputs['Transmission Weight'].default_value=.7
     mats['glass'].node_tree.nodes['Principled BSDF'].inputs['Roughness'].default_value=.06
     realism.fence(W,D,mats,box)
+    realism.lawn_blades(W,D,spec['elements'],[mats['grass'],mats['leaf']])
+    realism.garden_surroundings(W,D,mats,pole)
 else:
     # Lower-detail surroundings; the residence keeps the same SiteContext geometry.
     for y in (D-.2,):
@@ -124,14 +126,19 @@ for e in spec['elements']:
     if HIGH: realism.texture(custom, 16, .045, .18)
     if kind in ('patio', 'path', 'pavers', 'deck'):
         box(e['label'], (x+w/2, y+d/2, .09), (w, d, .22), custom)
-        for xx in range(0, max(1, int(w)), 3):
-            for yy in range(0, max(1, int(d)), 3):
-                tw, td = min(2.93, w-xx-.04), min(2.93, d-yy-.04)
-                if tw > 0 and td > 0: box('individual paver', (x+xx+tw/2+.02, y+yy+td/2+.02, .23), (tw, td, .14), custom, .02)
+        if HIGH and 'gravel' in e['material'].lower():
+            realism.gravel(x,y,w,d,[custom,mats['stone'],mats['linen']])
+        else:
+            for yy in range(math.ceil(d/1.5)):
+                for xx in range(math.ceil(w/3)+1):
+                    left=max(0,xx*3-(1.5 if yy%2 else 0));right=min(w,(xx+1)*3-(1.5 if yy%2 else 0));bottom=yy*1.5
+                    tw,td=right-left-.035,min(1.5,d-bottom)-.035
+                    if tw>0 and td>0:box('Cut stone paver',(x+left+tw/2,y+bottom+td/2,.23),(tw,td,.1),custom,.012)
     elif kind in ('pool', 'plunge_pool', 'spa', 'water_feature'):
         # Water and coping retain the exact footprint; not construction documentation.
         if HIGH:
-            shader=custom.node_tree.nodes['Principled BSDF'];shader.inputs['Roughness'].default_value=.15;shader.inputs['Metallic'].default_value=.25
+            shader=custom.node_tree.nodes['Principled BSDF'];shader.inputs['Roughness'].default_value=.09;shader.inputs['Metallic'].default_value=.12;shader.inputs['Transmission Weight'].default_value=.35;shader.inputs['IOR'].default_value=1.333
+            shader.inputs['Base Color'].default_value=(.06,.31,.35,1)
         box('pool coping', (x+w/2, y+d/2, .25), (w, d, .5), mats['stone'], .15)
         box('water surface', (x+w/2, y+d/2, .55), (max(.5, w-.9), max(.5, d-.9), .1), custom, .1)
     elif kind in ('putting_green', 'mini_golf', 'lawn', 'turf', 'sport_court', 'play_area'):
@@ -143,10 +150,11 @@ for e in spec['elements']:
     elif kind == 'shade_sail':
         realism.sail(x,y,w,d,h,mats,pole)
     elif kind in ('pergola', 'gazebo'):
+        timber=custom if 'charcoal' in e['material'].lower() else mats['teak']
         for px in (x+.25, x+w-.25):
-            for py in (y+.25, y+d-.25): box('pergola post', (px, py, h/2), (.45, .45, h), mats['wood'])
-        for py in (y, y+d): box('pergola beam', (x+w/2, py, h), (w+.8, .42, .6), mats['wood'])
-        for i in range(int(w/1.3)+1): box('cedar roof slat', (x+i*1.3, y+d/2, h+.45), (.22, d+1, .38), mats['teak'])
+            for py in (y+.25, y+d-.25): box('pergola post', (px, py, h/2), (.45, .45, h), timber)
+        for py in (y, y+d): box('pergola beam', (x+w/2, py, h), (w+.8, .42, .6), timber)
+        for i in range(int(w/1.3)+1): box('cedar roof slat', (x+i*1.3, y+d/2, h+.45), (.22, d+1, .38), timber)
     elif kind == 'dining':
         box('dining tabletop', (x+w/2, y+d/2, h), (w*.78, d*.48, .20), mats['teak'], .11)
         for px in (x+w*.2, x+w*.8):
@@ -171,7 +179,7 @@ for e in spec['elements']:
         for px in (x+w*.15, x+w*.38): box('cabinet door', (px, y-.06, h*.46), (w*.2, .08, h*.8), mats['teak'], .03)
     elif kind in ('planter', 'landscaping', 'privacy_planting'):
         box('planting bed', (x+w/2, y+d/2, .35), (w, d, .7), mats['earth'], .14)
-        if HIGH: realism.grasses(x,y,w,d,[mats['leaf'],mats['lightleaf'],mats['linen']], max(400,int(w*d*30)),h)
+        if HIGH: realism.planted_border(x,y,w,d,h,mats)
         for i in range(0 if HIGH else max(3, int(w/1.4))):
             px, py = x+.5+(w-1)*i/max(1, int(w/1.4)-1), y+d/2
             sphere('native planting', (px, py, .8+h*.35), (.8, d*.42, h*.6), mats['leaf'] if i%2 else mats['lightleaf'], True)
@@ -220,22 +228,25 @@ scene = bpy.context.scene
 scene.world.use_nodes = True
 scene.world.node_tree.nodes['Background'].inputs['Color'].default_value = (.82, .86, .76, 1)
 scene.world.node_tree.nodes['Background'].inputs['Strength'].default_value = .8
-scene.render.engine = 'CYCLES'; scene.cycles.samples = 128 if HIGH else 24; scene.cycles.use_denoising = True
+scene.render.engine = 'CYCLES'; scene.cycles.samples = 64 if HIGH else 24; scene.cycles.use_denoising = True
 scene.cycles.use_adaptive_sampling=True;scene.cycles.adaptive_threshold=.04 if HIGH else .05
 scene.cycles.max_bounces=12 if HIGH else 6
 scene.view_settings.view_transform='AgX'
 if HIGH:
     # CPU is reliable for short local jobs; Metal kernel startup can exceed the render timeout.
     scene.cycles.device='CPU'
-    sky=scene.world.node_tree.nodes.new('ShaderNodeTexSky');sky.sky_type='MULTIPLE_SCATTERING' if 'MULTIPLE_SCATTERING' in sky.bl_rna.properties['sky_type'].enum_items.keys() else 'NISHITA';sky.sun_elevation=math.radians(16);sky.sun_rotation=math.radians(125);sky.altitude=.2
+    sky=scene.world.node_tree.nodes.new('ShaderNodeTexSky');sky.sky_type='MULTIPLE_SCATTERING' if 'MULTIPLE_SCATTERING' in sky.bl_rna.properties['sky_type'].enum_items.keys() else 'NISHITA';sky.sun_elevation=math.radians(23);sky.sun_rotation=math.radians(150);sky.altitude=.2
     scene.world.node_tree.links.new(sky.outputs['Color'],scene.world.node_tree.nodes['Background'].inputs['Color'])
-    scene.world.node_tree.nodes['Background'].inputs['Strength'].default_value=.035
-    key.data.energy=2500;key.data.size=45
-    camera.data.type='PERSP';camera.data.lens=42
-    camera.location=Vector((-W*.82,D*1.52,D*.95))
-    target=Vector((W*.45,D*.30,6));camera.rotation_euler=(target-camera.location).to_track_quat('-Z','Y').to_euler()
+    scene.world.node_tree.nodes['Background'].inputs['Strength'].default_value=.12
+    key.data.energy=4500;key.data.size=45
+    for light in bpy.data.lights:
+        if light.type=='SUN':light.energy=2.4;light.color=(1,.83,.61);light.angle=.09
+    # A warm directional sun and broad sky fill retain soft detail in the shaded facade.
+    camera.data.type='PERSP';camera.data.lens=47
+    camera.location=Vector((-W*.69,D*1.42,D*.82))
+    target=Vector((W*.48,D*.32,5));camera.rotation_euler=(target-camera.location).to_track_quat('-Z','Y').to_euler()
     scene.view_settings.look='AgX - Medium High Contrast'
-    scene.view_settings.exposure=-.5
+    scene.view_settings.exposure=.2
 scene.render.resolution_x = 1920 if HIGH else 1280; scene.render.resolution_y = 1280 if HIGH else 960; scene.render.resolution_percentage = 100
 scene.render.image_settings.file_format = 'PNG'; scene.render.filepath = str(output)
 scene.view_settings.view_transform = 'AgX'
