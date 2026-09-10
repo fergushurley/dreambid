@@ -5,11 +5,15 @@ import { syntheticQuotes } from "@/fixtures/quotes";
 import { bidAuditSchema, fallbackAudit, normalizeQuotes, recommendationFromAudit } from "@/lib/quotes";
 import { askAstra } from "@/lib/openai";
 import { readBody, apiError } from "@/lib/http";
+import { checkFeasibility } from "@/lib/feasibility";
+import { siteForAddress } from "@/fixtures/site-context";
 import { SYSTEM } from "@/prompts/system";
 export const runtime = "nodejs";
 export async function POST(request: Request) {
   try {
     const { project, demoMode } = await readBody(request, z.object({ project: projectSpecSchema, demoMode: z.boolean() }));
+    const site = siteForAddress(project.propertyAddress, project.siteContextId === "site-maple-demo");
+    if (checkFeasibility(project, site, false).feasibility.status === "conflicts") throw new Error("Resolve preliminary layout conflicts before comparing bids for this scope.");
     const quotes = syntheticQuotes(project);
     const calculatedComparison = normalizeQuotes(project, quotes);
     const result = await askAstra("bid_audit", bidAuditSchema,

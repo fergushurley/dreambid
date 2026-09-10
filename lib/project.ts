@@ -3,7 +3,9 @@ import { projectElementSchema, projectSpecSchema, scopeItemSchema, type ProjectS
 import { canonicalProject, element, scope } from "@/fixtures/project";
 import { checkFeasibility } from "./feasibility";
 
-export const projectDraftSchema = z.object({ title: z.string(), homeownerGoals: z.array(z.string()), softConstraints: z.array(z.string()), elements: z.array(projectElementSchema).min(1).max(40), scopeItems: z.array(scopeItemSchema).min(1).max(80), assumptions: z.array(z.string()) });
+// Catalog pricing is owned by deterministic code, not generated or edited by Astra.
+const modelElementSchema = projectElementSchema.omit({ catalogItemId: true, pricing: true, indicativeRange: true });
+export const projectDraftSchema = z.object({ title: z.string(), homeownerGoals: z.array(z.string()), softConstraints: z.array(z.string()), elements: z.array(modelElementSchema).min(1).max(40), scopeItems: z.array(scopeItemSchema).min(1).max(80), assumptions: z.array(z.string()) });
 
 export function fixtureProject(brief: ProjectBrief, concept: RenovationConcept, site: SiteContext): ProjectSpec {
   const p = structuredClone(canonicalProject);
@@ -59,7 +61,7 @@ export function applyDraft(base: ProjectSpec, draft: z.infer<typeof projectDraft
 
 export const revisionPatchSchema = z.object({
   summary: z.string(), budgetMaximum: z.number().positive(),
-  removeElementIds: z.array(z.string()).max(40), upsertElements: z.array(projectElementSchema).max(40),
+  removeElementIds: z.array(z.string()).max(40), upsertElements: z.array(modelElementSchema).max(40),
   removeScopeItemIds: z.array(z.string()).max(80), upsertScopeItems: z.array(scopeItemSchema).max(80),
   assumptions: z.array(z.string()),
 });

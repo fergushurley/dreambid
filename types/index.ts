@@ -19,6 +19,27 @@ export type SiteContextFact = z.infer<typeof siteContextFactSchema>;
 export const pointSchema = z.object({ x: z.number().finite(), y: z.number().finite() });
 // A bounded backyard canvas keeps placement search and primitive rendering tractable.
 export const dimensionsSchema = z.object({ widthFt: z.number().positive().max(200), depthFt: z.number().positive().max(200) });
+export const layoutGeometrySchema = z.object({ position: pointSchema, size: dimensionsSchema.extend({ heightFt: z.number().positive().max(100) }) });
+export type LayoutGeometry = z.infer<typeof layoutGeometrySchema>;
+export const elementKindSchema = z.enum(["patio", "tree", "dining", "pergola", "planter", "kitchen", "lighting", "lounge", "path", "pool", "plunge_pool", "spa", "water_feature", "pavers", "deck", "gazebo", "shade_sail", "grill", "pizza_oven", "fire_pit", "fire_table", "putting_green", "mini_golf", "sport_court", "play_area", "turf", "lawn", "landscaping", "privacy_planting", "pathway_lighting", "fence", "privacy_screen", "seating_wall"]);
+export const priceRangeSchema = z.object({ low: money, high: money });
+export const featurePriceModelSchema = z.object({
+  basis: z.enum(["area", "linear", "fixed"]), baseWidthFt: z.number().positive(), baseDepthFt: z.number().positive(),
+  baseLow: money, baseHigh: money, fixedShare: z.number().min(0).max(1),
+});
+export type FeaturePriceModel = z.infer<typeof featurePriceModelSchema>;
+export const featureCatalogItemSchema = z.object({
+  id: z.string(), name: shortText, kind: elementKindSchema,
+  category: z.enum(["Water", "Hardscape", "Shade & structures", "Cooking", "Entertainment", "Recreation", "Landscaping", "Lighting", "Privacy & boundary"]),
+  description: shortText, installedRange: priceRangeSchema,
+  defaultSize: layoutGeometrySchema.shape.size, minSize: dimensionsSchema, maxSize: dimensionsSchema,
+  permitsMayApply: z.boolean(), setbacksMayApply: z.boolean(), utilitiesMayApply: z.boolean(),
+  traits: z.array(z.enum(["structural", "utility", "decorative", "recreational"])),
+  priceModel: featurePriceModelSchema, color: z.string().regex(/^#[0-9a-fA-F]{6}$/), notes: z.array(z.string()),
+});
+export type FeatureCatalogItem = z.infer<typeof featureCatalogItemSchema>;
+export const budgetSummarySchema = z.object({ range: priceRangeSchema, planningTotal: money, target: money, maximum: money, status: z.enum(["within", "uncertain", "over"]), overBy: money });
+export type BudgetSummary = z.infer<typeof budgetSummarySchema>;
 export const siteContextSchema = z.object({
   id: shortText, propertyAddress: shortText, isDemo: z.boolean(),
   parcelIdentifier: siteContextFactSchema, jurisdiction: siteContextFactSchema,
@@ -48,12 +69,15 @@ export type ProjectBrief = z.infer<typeof projectBriefSchema>;
 
 export const projectElementSchema = z.object({
   id: z.string().min(1).max(80),
-  kind: z.enum(["patio", "tree", "dining", "pergola", "planter", "kitchen", "lighting", "lounge", "path"]),
+  kind: elementKindSchema,
   label: shortText, position: pointSchema,
   size: dimensionsSchema.extend({ heightFt: z.number().positive().max(100) }),
   material: z.string().max(200), color: z.string().regex(/^#[0-9a-fA-F]{6}$/),
   estimatedCost: money, preserved: z.boolean(),
   scopeItemIds: z.array(z.string()).max(30),
+  // Optional for compatibility with saved v1 projects. All geometry remains in position/size.
+  catalogItemId: z.string().optional(), pricing: featurePriceModelSchema.optional(),
+  indicativeRange: priceRangeSchema.optional(),
 });
 export type ProjectElement = z.infer<typeof projectElementSchema>;
 export const scopeItemSchema = z.object({
@@ -72,6 +96,18 @@ export const feasibilityCheckSchema = z.object({
   checkedAt: z.string(), disclaimer: z.string(),
 });
 export type FeasibilityCheck = z.infer<typeof feasibilityCheckSchema>;
+export type LayoutConflict = FeasibilityCheck["conflicts"][number];
+
+export const layoutPatchSchema = z.object({
+  summary: shortText,
+  operations: z.array(z.discriminatedUnion("action", [
+    z.object({ action: z.literal("add"), catalogItemId: z.string(), position: pointSchema.nullable(), dimensions: dimensionsSchema.nullable() }),
+    z.object({ action: z.literal("update"), elementId: z.string(), position: pointSchema.nullable(), dimensions: dimensionsSchema.nullable() }),
+    z.object({ action: z.literal("remove"), elementId: z.string() }),
+    z.object({ action: z.literal("replace"), elementId: z.string(), catalogItemId: z.string() }),
+  ])).min(1).max(20),
+});
+export type LayoutPatch = z.infer<typeof layoutPatchSchema>;
 
 export const renovationConceptSchema = z.object({
   id: z.string(), title: shortText, designDirection: shortText,

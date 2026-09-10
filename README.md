@@ -69,6 +69,10 @@ Install Blender, then set `BLENDER_PATH` in `.env.local`. Standard macOS path:
 
 The **Concept** view can display separately generated illustrative photoreal assets for matching canonical geometry. **3D view** displays the current deterministic Blender result. **Site plan** shows structured footprints and the tree protection zone. Photoreal concepts are neither real property photographs nor live Blender renders; see [asset provenance and prompts](docs/PHOTOREAL_PREVIEWS.md).
 
+## Interactive planning
+
+Select a design and open **Customize layout** to browse 31 backyard features, drag or resize their footprints, edit dimensions, and see indicative ranges and preliminary warnings update in the same ProjectSpec. Current property context appears before generation; custom addresses do not inherit the demo’s facts. Pricing remains curated and preliminary. See the [interactive planning guide](docs/LAYOUT.md) for the $75K demo, price formulas and milestone scope.
+
 ## Canonical demo
 
 Use the prefilled fictional property, **24 Maple Lane, Montclair, NJ · demo property**, with the fixture site context. Keep the entire address, including its demo suffix. Its dimensions and rules are illustrative, not real property records or Montclair regulations. Enable **Demo playback** for exact results below.

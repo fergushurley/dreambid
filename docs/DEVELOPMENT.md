@@ -57,3 +57,9 @@ DreamBid was built from scratch during the GPT-6 Astra NYC Hackathon on Septembe
 ## Documentation references
 - https://developers.openai.com/api/docs/models/gpt-6-astra
 - https://developers.openai.com/api/docs/guides/structured-outputs
+
+## Continuing development: interactive planning P0
+
+Inspected a clean repository at `b4c8861`; extended the existing spec, renderer and SVG plan rather than replacing the architecture. Added the 31-feature catalog, optional backward-compatible element pricing metadata, typed layout patches, a running range/midpoint budget and a pointer/keyboard/numeric editor. The same spec drives geometry, scope, autosave, rendering and synthetic bids. Added explicit invalid-placement warnings and server-side quote gating for unresolved geometry. Current property context is now visible before concept generation, with immediate fixture isolation for custom addresses. See `docs/LAYOUT.md` for formulas, assumptions, verified behavior and the next milestone.
+
+Validation: 18 tests passed, production build passed, and the original deterministic HTTP flow still passed through real Blender output. Browser checks exercised custom-address isolation, concept selection, catalog addition, pointer movement and resizing. P1 remains catalog-aware Astra commands and concept regeneration; this checkpoint does not claim those are implemented yet.

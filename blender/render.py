@@ -107,14 +107,23 @@ for e in spec['elements']:
     x, y = e['position']['x'], e['position']['y']
     w, d, h = e['size']['widthFt'], e['size']['depthFt'], e['size']['heightFt']
     kind = e['kind']; custom = material(e['id']+' finish', rgb(e['color']))
-    if kind in ('patio', 'path'):
+    if kind in ('patio', 'path', 'pavers', 'deck'):
         box(e['label'], (x+w/2, y+d/2, .09), (w, d, .22), custom)
         for xx in range(0, max(1, int(w)), 3):
             for yy in range(0, max(1, int(d)), 3):
                 tw, td = min(2.93, w-xx-.04), min(2.93, d-yy-.04)
                 if tw > 0 and td > 0: box('individual paver', (x+xx+tw/2+.02, y+yy+td/2+.02, .23), (tw, td, .14), custom, .02)
+    elif kind in ('pool', 'plunge_pool', 'spa', 'water_feature'):
+        # Schematic water and coping; not excavation or construction documentation.
+        box('pool coping', (x+w/2, y+d/2, .25), (w, d, .5), mats['stone'], .15)
+        box('water surface', (x+w/2, y+d/2, .55), (max(.5, w-.9), max(.5, d-.9), .1), custom, .1)
+    elif kind in ('putting_green', 'mini_golf', 'lawn', 'turf', 'sport_court', 'play_area'):
+        box(e['label'], (x+w/2, y+d/2, .25), (w, d, .25), custom, .15)
+        if kind in ('putting_green', 'mini_golf'):
+            pole('putting flag pole', (x+w*.7, y+d*.65, .35), (x+w*.7, y+d*.65, 3.5), .04, mats['dark'])
+            box('putting flag', (x+w*.7+.6, y+d*.65, 3.1), (1.2, .06, .7), mats['linen'])
     elif kind == 'tree': tree_at(x, y, h, w)
-    elif kind == 'pergola':
+    elif kind in ('pergola', 'gazebo', 'shade_sail'):
         for px in (x+.25, x+w-.25):
             for py in (y+.25, y+d-.25): box('pergola post', (px, py, h/2), (.45, .45, h), mats['wood'])
         for py in (y, y+d): box('pergola beam', (x+w/2, py, h), (w+.8, .42, .6), mats['wood'])
@@ -141,12 +150,12 @@ for e in spec['elements']:
         box('sink basin', (x+w*.2, y+d*.55, h+.31), (2, 1.5, .08), mats['metal'], .15)
         pole('faucet', (x+w*.2, y+d*.77, h+.3), (x+w*.2, y+d*.77, h+1.4), .06, mats['metal'])
         for px in (x+w*.15, x+w*.38): box('cabinet door', (px, y-.06, h*.46), (w*.2, .08, h*.8), mats['teak'], .03)
-    elif kind == 'planter':
+    elif kind in ('planter', 'landscaping', 'privacy_planting'):
         box('planting bed', (x+w/2, y+d/2, .35), (w, d, .7), mats['earth'], .14)
         for i in range(max(3, int(w/1.4))):
             px, py = x+.5+(w-1)*i/max(1, int(w/1.4)-1), y+d/2
             sphere('native planting', (px, py, .8+h*.35), (.8, d*.42, h*.6), mats['leaf'] if i%2 else mats['lightleaf'], True)
-    elif kind == 'lighting':
+    elif kind in ('lighting', 'pathway_lighting'):
         for i in range(6):
             px, py = x+w*i/5, y
             pole('path light', (px, py, .2), (px, py, 1.5), .07, mats['dark'])
@@ -160,6 +169,10 @@ for e in spec['elements']:
         box('lounge plinth', (x+w/2, y+d/2, .6), (w, d, 1.2), mats['stone'])
         box('lounge cushion', (x+w/2, y+d/2, 1.5), (w-.3, d-.3, .7), mats['linen'], .18)
         box('lounge back', (x+w/2, y+d-.4, 2.3), (w-.2, .7, 1.5), mats['linen'], .18)
+
+    else:
+        # Remaining catalog items retain their exact footprint as labeled geometry proxies.
+        box(e['label']+' schematic footprint', (x+w/2, y+d/2, h/2), (w, d, h), custom, .1)
 
 # Orthographic architecture camera, looking from the open front-right corner.
 target = Vector((W*.49, D*.49, 2))

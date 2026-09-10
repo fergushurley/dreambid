@@ -10,7 +10,7 @@ export function blenderExecutable(): string | null {
   return [process.env.BLENDER_PATH, "/Applications/Blender.app/Contents/MacOS/Blender", "/usr/bin/blender", "/opt/homebrew/bin/blender"].find(p => p && existsSync(p)) || null;
 }
 export function sceneHash(project: ProjectSpec): string {
-  return createHash("sha256").update(JSON.stringify({ rendererVersion: 3, dimensions: project.dimensions, elements: project.elements.map(({ id, kind, position, size, material, color }) => ({ id, kind, position, size, material, color })) })).digest("hex").slice(0, 20);
+  return createHash("sha256").update(JSON.stringify({ rendererVersion: 4, dimensions: project.dimensions, elements: project.elements.map(({ id, kind, position, size, material, color }) => ({ id, kind, position, size, material, color })) })).digest("hex").slice(0, 20);
 }
 function fallbackSvg(project: ProjectSpec): string {
   const w = project.dimensions.widthFt, d = project.dimensions.depthFt;

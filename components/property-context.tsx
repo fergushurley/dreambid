@@ -1,0 +1,10 @@
+"use client";
+import { useState } from "react";
+import type { ProjectBrief, SiteContext } from "@/types";
+import { SitePlan } from "./site-plan";
+export function PropertyContext({ brief, site }: { brief: ProjectBrief; site: SiteContext }) {
+  const [showPhoto, setShowPhoto] = useState(true);
+  const photo = showPhoto ? brief.photos[0] : null;
+  const house = site.existingStructures.find(s => s.kind === "house");
+  return <div className="property-context"><div className="property-context-tabs"><button className={!photo ? "selected" : ""} onClick={() => setShowPhoto(false)}>Property context</button>{brief.photos.length > 0 && <button className={photo ? "selected" : ""} onClick={() => setShowPhoto(true)}>Your property photo</button>}<span>{site.isDemo ? "Illustrative demo property" : "Unverified address"}</span></div><div className="property-context-visual">{photo ? <img src={photo.dataUrl} alt="Homeowner-uploaded current property photo"/> : <SitePlan site={site} project={null}/>}<span className="property-source-label">{photo ? "Homeowner photo · unverified dimensions" : site.isDemo ? "Site plan · fixture geometry" : "Assumed design canvas · no property measurements retrieved"}</span></div><div className="property-facts"><div><small>Backyard canvas</small><strong>{site.yardDimensions.widthFt}′ × {site.yardDimensions.depthFt}′</strong><span>{site.isDemo ? "Fixture dimensions" : "Working assumption"}</span></div><div><small>House footprint</small><strong>{house ? `${house.widthFt}′ × ${house.depthFt}′` : "Not verified"}</strong><span>{house?.fact.status ?? "No source retrieved"}</span></div><div><small>Site rules</small><strong>{site.isDemo ? "10′ rear · 5′ side" : "Not verified"}</strong><span>{site.isDemo ? "Illustrative fixture rules" : "Municipal verification needed"}</span></div></div><p className="context-disclosure">{site.isDemo ? "Explore the fictional demo property, or enter a U.S. residential address and upload your own photos." : "We can plan from your address and photos. Nationwide parcel records, aerial imagery and government plans are not connected; confirm this assumed canvas before relying on placement."}</p></div>;
+}
