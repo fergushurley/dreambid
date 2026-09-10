@@ -53,5 +53,13 @@ test("normalization rejects stale revisions and duplicated scope rows", () => {
 });
 test("unresolvable geometry is reported as a conflict, never compliant", () => {
   const p = structuredClone(canonicalProject); p.elements.find(e => e.kind === "pergola")!.size.widthFt = 60;
-  assert.equal(checkFeasibility(p, canonicalSiteContext).feasibility.status, "conflicts");
+  const feasibility = checkFeasibility(p, canonicalSiteContext).feasibility;
+  assert.equal(feasibility.status, "conflicts");
+  assert.ok(!feasibility.likelyCompliant.some(text => text.includes("protection zone excluded")));
+});
+test("the explicit revised budget wins even when the model leaves the old cap", () => {
+  const p = makeProject(); const patch = { ...canonicalRevisionPatch(p, REVISION_PROMPT), budgetMaximum: 50000 };
+  assert.equal(applyRevision(p, patch, REVISION_PROMPT, canonicalSiteContext).budgetMaximum, 45000);
+  assert.throws(() => applyRevision(p, patch, "Add a kitchen and keep the total under $42.5k", canonicalSiteContext), /above the \$42500 cap/);
+  assert.equal(p.budgetMaximum, 50000);
 });

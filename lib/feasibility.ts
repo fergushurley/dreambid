@@ -53,7 +53,7 @@ export function checkFeasibility(input: ProjectSpec, site: SiteContext, repair =
     }
     if (!result.conflicts.some(c => c.elementId === e.id && !c.resolved)) result.likelyCompliant.push(`${e.label}: fits the available ${site.isDemo ? "fixture" : "assumed"} geometry${isStructure(e) && side !== null && rear !== null ? " and stated setback envelope" : ""}.`);
   }
-  if (tree) result.likelyCompliant.push("Mature tree retained; protection zone excluded from new hardscape and structures.");
+  if (tree && !result.conflicts.some(c => !c.resolved)) result.likelyCompliant.push("Mature tree retained; protection zone excluded from new hardscape and structures.");
   if (result.conflicts.some(c => !c.resolved)) result.status = "conflicts";
   project.feasibility = result;
   return projectSpecSchema.parse(project);

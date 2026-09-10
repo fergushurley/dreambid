@@ -65,11 +65,17 @@ export const revisionPatchSchema = z.object({
 });
 export type RevisionPatch = z.infer<typeof revisionPatchSchema>;
 
+/** Enforce explicit dollar-denominated caps independently of the model's patch. */
+function requestedBudgetLimit(instruction: string, currentMaximum: number): number {
+  const limits = [...instruction.matchAll(/\b(?:under|below|at most|no more than|budget(?:\s+of)?|maximum(?:\s+of)?|cap(?:\s+of)?)\s*\$\s*(\d[\d,]*(?:\.\d+)?)\s*(k\b)?/gi)]
+    .map(match => Number(match[1].replace(/,/g, "")) * (match[2] ? 1000 : 1));
+  return Math.min(currentMaximum, ...limits);
+}
+
 export function canonicalRevisionPatch(project: ProjectSpec, instruction: string): RevisionPatch {
   const matches = /remove.*pergola/i.test(instruction) && /kitchen/i.test(instruction);
   if (!matches) throw new Error("The offline revision supports the canonical pergola-to-kitchen change. Enable funded Astra access for other instructions.");
-  const budgetMatch = instruction.match(/\$([\d,]+)(k)?/i);
-  const budget = budgetMatch ? Number(budgetMatch[1].replace(/,/g, "")) * (budgetMatch[2] ? 1000 : 1) : project.budgetMaximum;
+  const budget = requestedBudgetLimit(instruction, project.budgetMaximum);
   if (budget < 42900) throw new Error("The fixture kitchen design costs $42,900. A lower budget requires a new scope decision with live Astra.");
   const remove = project.elements.filter(e => e.kind === "pergola").map(e => e.id);
   const kitchen = element("kitchen", "kitchen", "Outdoor kitchen", 23, 23, 12, 4, 3.2, 18700, "Stucco, stone and stainless steel", "#b9ad92", ["kitchen-base", "kitchen-countertop", "kitchen-electrical"]);
@@ -88,6 +94,7 @@ export function applyRevision(project: ProjectSpec, patch: RevisionPatch, instru
   if (patch.removeElementIds.some(id => protectedIds.includes(id)) || patch.upsertElements.some(e => protectedIds.includes(e.id))) throw new Error("Revision attempted to change a protected element.");
   // Never silently increase the owner's existing spending cap.
   if (patch.budgetMaximum > project.budgetMaximum) throw new Error("Revision cannot raise the hard budget maximum.");
+  const budgetMaximum = Math.min(patch.budgetMaximum, requestedBudgetLimit(instruction, project.budgetMaximum));
   const updatedIds = new Set(patch.upsertElements.map(e => e.id));
   const updatedScope = new Set(patch.upsertScopeItems.map(s => s.id));
   const elements = [...project.elements.filter(e => !patch.removeElementIds.includes(e.id) && !updatedIds.has(e.id)), ...patch.upsertElements];
@@ -98,7 +105,7 @@ export function applyRevision(project: ProjectSpec, patch: RevisionPatch, instru
     ...patch.upsertScopeItems.filter(s => project.scopeItems.some(old => old.id === s.id && old.estimatedCost !== s.estimatedCost)).map(s => `Adjusted ${s.category.toLowerCase()} budget to $${s.estimatedCost.toLocaleString("en-US")}`),
   ];
   const preserved = project.elements.filter(e => !patch.removeElementIds.includes(e.id) && !updatedIds.has(e.id)).map(e => e.label);
-  const result = finalizeProject({ ...project, version: project.version + 1, budgetMaximum: patch.budgetMaximum, budgetTarget: Math.min(project.budgetTarget, patch.budgetMaximum), elements, scopeItems, assumptions: [...new Set([...project.assumptions, ...patch.assumptions])], revisionHistory: [...project.revisionHistory, { version: project.version + 1, instruction, summary: patch.summary, changes, preserved, createdAt: new Date().toISOString() }] }, site);
+  const result = finalizeProject({ ...project, version: project.version + 1, budgetMaximum, budgetTarget: Math.min(project.budgetTarget, budgetMaximum), elements, scopeItems, assumptions: [...new Set([...project.assumptions, ...patch.assumptions])], revisionHistory: [...project.revisionHistory, { version: project.version + 1, instruction, summary: patch.summary, changes, preserved, createdAt: new Date().toISOString() }] }, site);
   if (result.estimatedTotal > result.budgetMaximum) throw new Error(`Revised scope is $${result.estimatedTotal}, above the $${result.budgetMaximum} cap. The original project was kept.`);
   return result;
 }

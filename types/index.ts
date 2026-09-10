@@ -17,7 +17,8 @@ export const siteContextFactSchema = z.object({
 export type SiteContextFact = z.infer<typeof siteContextFactSchema>;
 
 export const pointSchema = z.object({ x: z.number().finite(), y: z.number().finite() });
-export const dimensionsSchema = z.object({ widthFt: z.number().positive().max(5000), depthFt: z.number().positive().max(5000) });
+// A bounded backyard canvas keeps placement search and primitive rendering tractable.
+export const dimensionsSchema = z.object({ widthFt: z.number().positive().max(200), depthFt: z.number().positive().max(200) });
 export const siteContextSchema = z.object({
   id: shortText, propertyAddress: shortText, isDemo: z.boolean(),
   parcelIdentifier: siteContextFactSchema, jurisdiction: siteContextFactSchema,
