@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { projectElementSchema, projectSpecSchema, scopeItemSchema, type ProjectSpec, type ProjectBrief, type RenovationConcept, type SiteContext } from "@/types";
 import { canonicalProject, element, scope } from "@/fixtures/project";
+import { applyConceptTier } from "@/fixtures/concept-tiers";
 import { checkFeasibility } from "./feasibility";
 
 // Catalog pricing is owned by deterministic code, not generated or edited by Astra.
@@ -17,6 +18,7 @@ export function fixtureProject(brief: ProjectBrief, concept: RenovationConcept, 
     p.elements = p.elements.filter(e => e.kind !== "tree");
     p.hardConstraints = ["Stay at or below the budget maximum", "Verify actual site dimensions and all existing features before construction"];
   }
+  if (concept.id.endsWith("-v2")) return finalizeProject(applyConceptTier(p,concept.palette),site);
   const factor = (brief.budget / 50000) * (concept.palette === "meadow" ? 0.73 : concept.palette === "retreat" ? 1.17 : 1);
   p.scopeItems = p.scopeItems.map(s => ({ ...s, estimatedCost: Math.round(s.estimatedCost * factor / 100) * 100 }));
   if (concept.palette === "meadow") {

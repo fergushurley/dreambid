@@ -319,5 +319,380 @@
     "model": "gpt-image-2",
     "generatedAt": "2026-09-10T18:48:19.001Z",
     "source": "AI concept generated from deterministic Blender fixture; not a property photograph"
+  },
+  {
+    "variant": "meadow-v2",
+    "imageUrl": "/demo/photoreal/meadow-simple.png",
+    "geometry": [
+      48,
+      58,
+      [
+        [
+          "dining",
+          "dining",
+          10,
+          13,
+          8,
+          5,
+          2.5,
+          "Teak and linen",
+          "#b89670"
+        ],
+        [
+          "lights",
+          "lighting",
+          8,
+          8,
+          18,
+          12,
+          8,
+          "Warm LED · 2700K",
+          "#eacb86"
+        ],
+        [
+          "patio",
+          "patio",
+          7,
+          7,
+          20,
+          14,
+          0.25,
+          "Compacted gravel",
+          "#c7bea6"
+        ],
+        [
+          "pergola",
+          "shade_sail",
+          9,
+          10,
+          12,
+          10,
+          9,
+          "Off-white tensioned fabric on slender posts",
+          "#e0d9c6"
+        ],
+        [
+          "planting",
+          "planter",
+          8,
+          23,
+          12,
+          3,
+          2,
+          "Native grasses and terracotta",
+          "#7a8962"
+        ],
+        [
+          "tree",
+          "tree",
+          38,
+          41,
+          12,
+          12,
+          23,
+          "Existing mature oak",
+          "#647755"
+        ]
+      ]
+    ],
+    "rotations": [
+      [
+        "patio",
+        0
+      ],
+      [
+        "tree",
+        0
+      ],
+      [
+        "pergola",
+        0
+      ],
+      [
+        "dining",
+        0
+      ],
+      [
+        "lights",
+        0
+      ],
+      [
+        "planting",
+        0
+      ]
+    ],
+    "model": "Built-in image generation",
+    "generatedAt": "2026-09-10",
+    "source": "Retained AI concept reference for curated feature scope; geometry is approximate, not a property photograph. See docs/CONCEPT_TIERS.md for prompts."
+  },
+  {
+    "variant": "terrace-v2",
+    "imageUrl": "/demo/photoreal/terrace-kitchen.png",
+    "geometry": [
+      48,
+      58,
+      [
+        [
+          "dining",
+          "dining",
+          10,
+          13,
+          10,
+          6,
+          2.5,
+          "Teak and linen",
+          "#b89670"
+        ],
+        [
+          "kitchen",
+          "kitchen",
+          20,
+          23,
+          8,
+          3,
+          3.2,
+          "Stone countertop, cabinetry and stainless grill",
+          "#b9ad92"
+        ],
+        [
+          "lights",
+          "lighting",
+          8,
+          8,
+          27,
+          21,
+          8,
+          "Warm LED · 2700K",
+          "#eacb86"
+        ],
+        [
+          "patio",
+          "patio",
+          7,
+          7,
+          22,
+          20,
+          0.25,
+          "Limestone pavers",
+          "#d4c8af"
+        ],
+        [
+          "pergola",
+          "pergola",
+          9,
+          10,
+          12,
+          12,
+          9,
+          "Natural cedar",
+          "#a68059"
+        ],
+        [
+          "planting",
+          "planter",
+          39,
+          8,
+          3,
+          22,
+          2,
+          "Native grasses and terracotta",
+          "#7a8962"
+        ],
+        [
+          "tree",
+          "tree",
+          38,
+          41,
+          12,
+          12,
+          23,
+          "Existing mature oak",
+          "#647755"
+        ]
+      ]
+    ],
+    "rotations": [
+      [
+        "patio",
+        0
+      ],
+      [
+        "tree",
+        0
+      ],
+      [
+        "pergola",
+        0
+      ],
+      [
+        "dining",
+        0
+      ],
+      [
+        "lights",
+        0
+      ],
+      [
+        "planting",
+        0
+      ],
+      [
+        "kitchen",
+        0
+      ]
+    ],
+    "model": "Built-in image generation",
+    "generatedAt": "2026-09-10",
+    "source": "Retained AI concept reference for curated feature scope; geometry is approximate, not a property photograph. See docs/CONCEPT_TIERS.md for prompts."
+  },
+  {
+    "variant": "retreat-v2",
+    "imageUrl": "/demo/photoreal/retreat-pool.png",
+    "geometry": [
+      48,
+      58,
+      [
+        [
+          "dining",
+          "dining",
+          10,
+          13,
+          10,
+          6,
+          2.5,
+          "Teak and linen",
+          "#b89670"
+        ],
+        [
+          "kitchen",
+          "kitchen",
+          27,
+          20,
+          12,
+          4,
+          3.2,
+          "Stone countertop, cabinetry and stainless grill",
+          "#b9ad92"
+        ],
+        [
+          "lights",
+          "lighting",
+          8,
+          8,
+          27,
+          21,
+          8,
+          "Warm LED · 2700K",
+          "#eacb86"
+        ],
+        [
+          "lounge",
+          "lounge",
+          23,
+          27,
+          10,
+          4,
+          3,
+          "Stone and linen",
+          "#c4b7a0"
+        ],
+        [
+          "patio",
+          "patio",
+          7,
+          7,
+          32,
+          26,
+          0.25,
+          "Premium sandstone",
+          "#d4c8af"
+        ],
+        [
+          "pergola",
+          "pergola",
+          9,
+          10,
+          18,
+          14,
+          9,
+          "Charcoal-painted timber",
+          "#434943"
+        ],
+        [
+          "planting",
+          "planter",
+          39,
+          8,
+          3,
+          22,
+          2,
+          "Native grasses and terracotta",
+          "#7a8962"
+        ],
+        [
+          "pool",
+          "pool",
+          6,
+          35,
+          24,
+          12,
+          1,
+          "Blue water and pale stone coping",
+          "#73bfc8"
+        ],
+        [
+          "tree",
+          "tree",
+          38,
+          41,
+          12,
+          12,
+          23,
+          "Existing mature oak",
+          "#647755"
+        ]
+      ]
+    ],
+    "rotations": [
+      [
+        "patio",
+        0
+      ],
+      [
+        "tree",
+        0
+      ],
+      [
+        "pergola",
+        0
+      ],
+      [
+        "dining",
+        0
+      ],
+      [
+        "lights",
+        0
+      ],
+      [
+        "planting",
+        0
+      ],
+      [
+        "kitchen",
+        0
+      ],
+      [
+        "lounge",
+        0
+      ],
+      [
+        "pool",
+        90
+      ]
+    ],
+    "model": "Built-in image generation",
+    "generatedAt": "2026-09-10",
+    "source": "Retained AI concept reference for curated feature scope; geometry is approximate, not a property photograph. See docs/CONCEPT_TIERS.md for prompts."
   }
 ]

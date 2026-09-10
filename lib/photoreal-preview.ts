@@ -3,7 +3,6 @@ import previews from "@/fixtures/photoreal-previews.json";
 
 /** Illustrative AI images are shown only for the geometry they were created from. */
 export function photorealPreview(project: ProjectSpec | null): string | null {
-  if (project?.elements.some(e=>(e.rotationDeg??0)!==0)) return null;
   if (!project || project.siteContextId !== "site-maple-demo") return null;
   const geometry = [
     project.dimensions.widthFt,
@@ -14,5 +13,9 @@ export function photorealPreview(project: ProjectSpec | null): string | null {
     ]),
   ];
   const signature = JSON.stringify(geometry);
-  return previews.find(preview => JSON.stringify(preview.geometry) === signature)?.imageUrl ?? null;
+  return previews.find(preview => {
+    if (JSON.stringify(preview.geometry) !== signature) return false;
+    const rotations = ("rotations" in preview ? preview.rotations : undefined) ?? project.elements.map(e=>[e.id,0]);
+    return JSON.stringify(rotations.slice().sort()) === JSON.stringify(project.elements.map(e=>[e.id,e.rotationDeg??0]).sort());
+  })?.imageUrl ?? null;
 }

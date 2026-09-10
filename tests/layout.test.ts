@@ -106,3 +106,21 @@ test("90 degree rotation preserves center and linear price; vertical fence resiz
  assert.deepEqual(restored.position,fence.position);assert.deepEqual(restored.size,fence.size);assert.equal(restored.rotationDeg,0);
  assert.throws(()=>rotate(p,"tree"),/protected/);
 });
+
+test("featured concept prices match selected kitchen and pool scopes without raising the owner's budget", async () => {
+ const {featuredConcepts}=await import("../fixtures/concepts");
+ const concepts=featuredConcepts(canonicalBrief).concepts;
+ const projects=concepts.map(c=>fixtureProject(canonicalBrief,c,canonicalSiteContext));
+ projects.forEach((p,i)=>{
+  assert.deepEqual(budgetSummary(p).range,concepts[i].budgetRange);
+  assert.equal(p.budgetMaximum,50000);
+  assert.equal(p.estimatedTotal,p.scopeItems.reduce((sum,s)=>sum+s.estimatedCost,0));
+  assert.equal(p.feasibility.conflicts.filter(c=>!c.resolved).length,0,JSON.stringify(p.feasibility.conflicts));
+  assert.equal(normalizeQuotes(p,syntheticQuotes(p)).length,3);
+ });
+ assert.ok(!projects[0].elements.some(e=>["kitchen","pool","pergola"].includes(e.kind)));
+ assert.ok(projects[1].elements.some(e=>e.kind==="kitchen"));assert.ok(!projects[1].elements.some(e=>e.kind==="pool"));
+ assert.ok(projects[2].elements.some(e=>e.kind==="kitchen"));assert.ok(projects[2].elements.some(e=>e.kind==="pool"));
+ assert.ok(concepts[2].budgetRange.low>50000);
+ assert.deepEqual(featuredConcepts({...canonicalBrief,budget:10000}).concepts.map(c=>c.budgetRange),concepts.map(c=>c.budgetRange));
+});

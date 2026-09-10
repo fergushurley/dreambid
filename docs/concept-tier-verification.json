@@ -1,0 +1,133 @@
+[
+  {
+    "concept": "The simple refresh",
+    "imageUrl": "/demo/photoreal/meadow-simple.png",
+    "range": {
+      "low": 12330,
+      "high": 16680
+    },
+    "midpoint": 14500,
+    "budget": 50000,
+    "elements": [
+      {
+        "kind": "patio",
+        "cost": 6000
+      },
+      {
+        "kind": "tree",
+        "cost": 0
+      },
+      {
+        "kind": "shade_sail",
+        "cost": 1800
+      },
+      {
+        "kind": "dining",
+        "cost": 1600
+      },
+      {
+        "kind": "lighting",
+        "cost": 1100
+      },
+      {
+        "kind": "planter",
+        "cost": 2000
+      }
+    ],
+    "conflicts": []
+  },
+  {
+    "concept": "The kitchen terrace",
+    "imageUrl": "/demo/photoreal/terrace-kitchen.png",
+    "range": {
+      "low": 36470,
+      "high": 49340
+    },
+    "midpoint": 42900,
+    "budget": 50000,
+    "elements": [
+      {
+        "kind": "patio",
+        "cost": 10000
+      },
+      {
+        "kind": "tree",
+        "cost": 0
+      },
+      {
+        "kind": "pergola",
+        "cost": 8000
+      },
+      {
+        "kind": "dining",
+        "cost": 3200
+      },
+      {
+        "kind": "lighting",
+        "cost": 2200
+      },
+      {
+        "kind": "planter",
+        "cost": 2000
+      },
+      {
+        "kind": "kitchen",
+        "cost": 14500
+      }
+    ],
+    "conflicts": []
+  },
+  {
+    "concept": "The poolside retreat",
+    "imageUrl": "/demo/photoreal/retreat-pool.png",
+    "range": {
+      "low": 108660,
+      "high": 159350
+    },
+    "midpoint": 134000,
+    "budget": 50000,
+    "elements": [
+      {
+        "kind": "patio",
+        "cost": 16000
+      },
+      {
+        "kind": "tree",
+        "cost": 0
+      },
+      {
+        "kind": "pergola",
+        "cost": 10500
+      },
+      {
+        "kind": "dining",
+        "cost": 4000
+      },
+      {
+        "kind": "lighting",
+        "cost": 4500
+      },
+      {
+        "kind": "planter",
+        "cost": 5000
+      },
+      {
+        "kind": "kitchen",
+        "cost": 19000
+      },
+      {
+        "kind": "lounge",
+        "cost": 4000
+      },
+      {
+        "kind": "pool",
+        "range": {
+          "low": 50000,
+          "high": 80000
+        },
+        "cost": 65000
+      }
+    ],
+    "conflicts": []
+  }
+]

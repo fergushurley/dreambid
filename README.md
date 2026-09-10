@@ -82,7 +82,7 @@ Use the prefilled fictional property, **24 Maple Lane, Montclair, NJ · demo pro
 
 1. Enter: “Make this backyard a great space for entertaining. My budget is $50,000. Keep the mature tree. Add dining, shade and better lighting.”
 2. Select the middle concept, **The gathering garden**.
-3. Inspect the $41,000 design, retained tree, and preliminary three-foot pergola adjustment inside the fixture side setback.
+3. Inspect the $42,900 kitchen terrace, its $36,470–$49,340 preliminary range, retained tree and preliminary feasibility. The pool option is deliberately higher-budget; its price is not forced under the homeowner cap.
 4. Revise: “Remove the pergola, add an outdoor kitchen, and keep the total under $45,000.”
 5. Verify revision 2 at $42,900 with a $45,000 cap, retained tree and dining, and the added kitchen.
 6. Request three synthetic quotes; click **Compare complete scope**. Use **Scope X-ray** to inspect the kitchen work missing from the cheapest headline bid.
@@ -126,3 +126,5 @@ The December 2026 stretch target requires **402 retained firms** at a mix of 100
 A timed video flow/script is included; no recorded video or hosted production service is claimed. Government ingestion, actual site measurement, general collision/engineering analysis, real contractor procurement, authentication and billing remain outside this prototype.
 
 The layout editor now has a **Material view** using authored Blender-rendered lawn, paving, water, tree and furniture assets. **Technical plan** retains measurement overlays. Selected elements support **Rotate 90°**; a rotated fence keeps its installed length and cost, while later resizing updates both. The **Blender / 3D** tab offers a separate high-detail Cycles render, also usable as a reference for AI concept regeneration. See [Blender quality and asset reproduction](docs/BLENDER_QUALITY.md).
+
+Current concept cards use three clearly different feature scopes: **Simple refresh** ($12,330–$16,680), **Kitchen terrace** ($36,470–$49,340) and **Poolside retreat** ($108,660–$159,350). Kitchens appear in options two and three; a pool and lounge appear in option three. These preliminary installed ranges are computed from the same ProjectSpec used by the editor. Astra supplies context and structured edits; the tier geometries and reference images are curated. [Scope, images and generation prompts](docs/CONCEPT_TIERS.md). Run `node --import tsx scripts/smoke-tiers.ts --live` to verify live context and quote continuity.

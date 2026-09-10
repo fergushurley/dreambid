@@ -33,3 +33,7 @@ Structured outputs made it practical to connect design reasoning to a persistent
 DreamBid was built from scratch during the GPT-6 Astra NYC Hackathon on September 10, 2026.
 
 The app is a local hackathon prototype. Contractor names, bids, costs, and canonical property rules are synthetic; no government records or real aerial imagery were ingested. No real contractors were contacted. The feasibility check is preliminary and requires survey and municipal/professional verification. No live-video recording, real customer traction, revenue, permit approval, or model-native async-tool/mid-turn-steering integration is claimed.
+
+## Continuing product refinement
+
+The current three-card experience uses curated investment tiers with live Astra contextual reasoning: a simple refresh, a kitchen terrace and a poolside kitchen/lounge project. Their prices are rolled up from the same ProjectSpec that opens in the editor, rather than generated from image appearance or forced under budget. Initial reference images are retained AI assets, clearly labeled; live regeneration still uses the edited Blender geometry. Added Blender material/furniture assets in the interactive editor, quarter-turn rotation with preserved linear pricing, and a detailed Cycles property view. The new live tier verification is recorded in `docs/tier-live-verification.json`; the earlier end-to-end Astra draft-generation evidence describes the original canonical path.

@@ -1,0 +1,35 @@
+{
+  "verifiedAt": "2026-09-10T20:16:06.832Z",
+  "concepts": {
+    "mode": "live",
+    "model": "gpt-6-astra",
+    "reason": null,
+    "responseId": "resp_0b1e73fea12c6a17016aa30fc6f3a887d29a608b798f6259b7",
+    "durationMs": 24874
+  },
+  "project": {
+    "mode": "live",
+    "model": "gpt-6-astra",
+    "reason": null,
+    "responseId": "resp_0612280cbee9e0ff016aa30fded94087d296914f12ad485f0f",
+    "durationMs": 11969
+  },
+  "quotes": {
+    "mode": "live",
+    "model": "gpt-6-astra",
+    "reason": null,
+    "responseId": "resp_004ee74ec60f820d016aa30fec694487d29b4ff2fe7a6a5e85",
+    "durationMs": 27036
+  },
+  "range": {
+    "low": 36470,
+    "high": 49340
+  },
+  "midpoint": 42900,
+  "budget": 50000,
+  "quoteTotals": [
+    42900,
+    45400,
+    48400
+  ]
+}
