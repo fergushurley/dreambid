@@ -4,7 +4,7 @@ Built September 10, 2026. The public repository contains the code, fixtures, ren
 
 ## Recorded product walkthrough
 
-[Watch the 83-second narrated demo](https://github.com/user-attachments/assets/99e1e450-4dff-4be2-967e-cdc4aaa5aa8f) · [English captions](media/dreambid-demo.srt)
+[Watch the 83-second narrated demo](https://dreambid-mocha.vercel.app/demo/dreambid-demo.mp4) · [English captions](media/dreambid-demo.srt)
 
 The recording shows the actual application at commit `3740226`: the prefilled property, three designs, direct entry to the layout editor, adding and resizing features, a setback warning, an Astra budget revision, synthetic quote normalization and a downloaded bid package. Concept selection uses visibly labeled deterministic playback. The budget edit and quote assessment use live Astra; API waiting time is removed with editorial cuts. Narration uses OpenAI's Cedar AI voice. The MP4 is 1920 × 1080 at 30 fps, with H.264 video, AAC audio and an English subtitle track.
 

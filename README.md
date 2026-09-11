@@ -1,6 +1,8 @@
 # DreamBid
 
-https://github.com/user-attachments/assets/99e1e450-4dff-4be2-967e-cdc4aaa5aa8f
+[![Watch the DreamBid demo](docs/media/dreambid-demo-poster.png)](https://dreambid-mocha.vercel.app/demo/dreambid-demo.mp4)
+
+**[▶ Watch the 83-second demo](https://dreambid-mocha.vercel.app/demo/dreambid-demo.mp4)** · [Download MP4](https://github.com/fergushurley/dreambid/raw/refs/heads/main/public/demo/dreambid-demo.mp4)
 
 *Watch the 83-second product walkthrough · AI narration · Recorded app interactions with edited API waits. Concept selection uses labeled demo playback; the budget edit and quote assessment use live Astra. [Transcript and recording details](docs/DEMO.md#recorded-product-walkthrough).*
 

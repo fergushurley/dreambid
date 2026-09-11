@@ -16,7 +16,7 @@ https://github.com/fergushurley/dreambid
 
 ## Demo video and hosted app
 
-[Watch the narrated product demo](https://github.com/user-attachments/assets/99e1e450-4dff-4be2-967e-cdc4aaa5aa8f) · [Open DreamBid](https://dreambid-mocha.vercel.app/)
+[Watch the narrated product demo](https://dreambid-mocha.vercel.app/demo/dreambid-demo.mp4) · [Open DreamBid](https://dreambid-mocha.vercel.app/)
 
 The completed video is **83 seconds**, not a one-minute cut. It shows actual app interactions with AI narration, labeled deterministic concept selection, live Astra layout revision and quote assessment, and edited API waits. See [the transcript and recording details](DEMO.md#recorded-product-walkthrough). A separate one-minute presentation script remains in that guide.
 
