@@ -2,7 +2,7 @@
 
 https://github.com/user-attachments/assets/99e1e450-4dff-4be2-967e-cdc4aaa5aa8f
 
-*83-second product walkthrough · AI narration · Recorded app interactions with edited API waits. Concept selection uses labeled demo playback; the budget edit and quote assessment use live Astra. [Transcript and recording details](docs/DEMO.md#recorded-product-walkthrough).*
+*Watch the 83-second product walkthrough · AI narration · Recorded app interactions with edited API waits. Concept selection uses labeled demo playback; the budget edit and quote assessment use live Astra. [Transcript and recording details](docs/DEMO.md#recorded-product-walkthrough).*
 
 **From address, to idea, to buildable project, to bid.**
 
