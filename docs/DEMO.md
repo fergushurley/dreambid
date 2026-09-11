@@ -2,6 +2,34 @@
 
 Built September 10, 2026. The public repository contains the code, fixtures, renderer, and intentionally retained demo images. `docs/live-verification.json` records successful actual Astra calls; it is evidence, not a cached live response.
 
+## Recorded product walkthrough
+
+[Watch the 83-second narrated demo](https://github.com/user-attachments/assets/99e1e450-4dff-4be2-967e-cdc4aaa5aa8f) · [English captions](media/dreambid-demo.srt)
+
+The recording shows the actual application at commit `3740226`: the prefilled property, three designs, direct entry to the layout editor, adding and resizing features, a setback warning, an Astra budget revision, synthetic quote normalization and a downloaded bid package. Concept selection uses visibly labeled deterministic playback. The budget edit and quote assessment use live Astra; API waiting time is removed with editorial cuts. Narration uses OpenAI's Cedar AI voice. The MP4 is 1920 × 1080 at 30 fps, with H.264 video, AAC audio and an English subtitle track.
+
+The recorded plan starts with the $50,000 canonical cap. After adding a pool and putting green, it reaches a $90,970–$138,340 planning range. “Keep the tree and get this under $75K” retains the existing, stricter $50,000 cap. The accepted live proposal removes the pool and substitutes a built-in grill for the kitchen, reaching **$30,890–$47,150** with a **$39,020** midpoint and no remaining geometry conflicts. Live model choices can vary in a new run.
+
+In the recording, Greenline's **$34,520** headline excludes **$10,000** of required terrace, subbase and drainage work. Its normalized total is **$44,520**, compared with Oak & Field's complete **$39,020** and Forma's **$47,220**. All three bids and adjustment estimates are synthetic. These are the recording's edited-project figures; the original regression scenario below uses a different final scope.
+
+### Narration transcript
+
+> Home improvement starts with inspiration. But turning an idea into something buildable, feasible, and fairly priced is still incredibly painful.
+
+> DreamBid starts with your address, property context, and photos. Astra turns what you want into realistic project options.
+
+> You get three directions, from a simple refresh to a full transformation, with preliminary installed price ranges for every major feature.
+
+> Then you can actually design the project. Add a pool, pavers, an outdoor kitchen, or a putting green. Move and resize them, and watch the budget update instantly.
+
+> DreamBid also understands site constraints. Put something inside a setback or protected zone, and it flags the issue before you ever call a contractor.
+
+> And because Astra understands the project state, you can simply say, “Keep the tree and get this under seventy-five thousand dollars.”
+
+> Finally, DreamBid turns the design into a bid package and compares three quotes on the same scope, exposing exclusions hidden behind the cheapest headline price.
+
+> DreamBid. From address, to idea, to buildable project, to bid.
+
 ## Before recording or presenting
 
 1. Keep the Mac open, plugged in, awake and online. Start `npm run dev` (or `npm run build` then `npm start` for the stable production build).
@@ -30,12 +58,12 @@ Result: **$42,900**, budget maximum **$45,000**, revision **2**. The tree and di
 
 ## One-minute video script
 
-Use **Demo playback**. State that it is a deterministic replay of the working flow and that live Astra calls have also been verified. No recording is included merely because this script exists.
+Use **Demo playback**. State that it is a deterministic replay of the working flow and that live Astra calls have also been verified. This shorter presentation script is separate from the completed 83-second recording above.
 
 | Time | On screen | Voiceover |
 |---|---|---|
 | 0–8s | Address, brief, budget; click Explore my possibilities | “DreamBid turns a backyard idea into a project you can actually compare bids for. Keep the tree, add dining and shade, and stay under fifty thousand.” |
-| 8–17s | Three concepts; select The gathering garden | “Astra turns homeowner intent, images and explicit site assumptions into three structured directions.” |
+| 8–17s | Three concepts; select The kitchen terrace | “Astra turns homeowner intent, images and explicit site assumptions into three structured directions.” |
 | 17–28s | Concept; switch to 3D view and Site plan; show setback receipt | “One project specification drives the design and Blender scene. The preliminary check moves this pergola three feet inside our clearly labeled fixture setback.” |
 | 28–39s | Paste revision; submit; show kitchen and $42,900 | “Change the brief: trade the pergola for a kitchen, under forty-five thousand. The tree stays. So does the scope we did not change.” |
 | 39–53s | Get 3 quotes; show headline prices; reveal complete scope | “The cheapest synthetic bid is thirty-seven nine. But electrical and countertop work are excluded. Its complete-scope estimate is forty-seven six.” |
@@ -69,7 +97,7 @@ Normalized-price rank: A, C, B. Recommendation: A. The seemingly cheapest C cost
 | API missing key, quota exhausted, timeout or invalid output | Visible fallback badge. Enable Demo playback and use exact canonical inputs. State that the reasoning is a fixture replay. Never hide the badge. |
 | Arbitrary offline revision unsupported | The existing project stays intact with an actionable error. Use the canonical revision or restore funded Astra access. |
 | Blender unavailable or times out | A deterministic SVG plan renders; Site plan remains available. Retained repo Blender images still show the canonical references, labeled appropriately. |
-| Photoreal concept missing / geometry changed | The Concept tab falls back to the current site plan with a Generate concept action. The separate Blender / 3D tab shows geometry. It must not show an unrelated cached concept. |
+| Photoreal concept missing / geometry changed | Matching retained AI finishes are used only for their original geometry. Changed layouts show the current Blender result or site plan with a regeneration action; unrelated cached concepts must not be displayed. |
 | Property records or zoning unavailable | Show unknown facts, illustrative geometry and professional-verification notes. Never relabel fixtures as government data. |
 | Reload / browser interruption | Use the offered saved project from this browser. Photos are not persisted; upload again if needed for a new analysis. |
 | Local server failure | Restart `npm run dev`; if development compilation is disrupted, use the verified production build with `npm start`. |
@@ -81,7 +109,8 @@ Normalized-price rank: A, C, B. Recommendation: A. The seemingly cheapest C cost
 - **Astra in product:** real Responses API calls for image/brief analysis, concept generation, ProjectSpec creation, revision and bid assessment. Arithmetic and invariant checks are deterministic.
 - **Live demo:** working local web app, project revision, actual Blender visualization, scope-linked price reveal. Three bids are synthetic.
 - **Technicality:** persistent shared spec, provenance-bearing site facts, minimal validated patches, model reconciliation, content-based render caching and graceful fallbacks.
-- **Not implemented:** real government ingestion, live aerial measurements, verified contractor network, permit approval, production CAD, payment processing, model-native async tools or mid-turn steering.
+- **Property context:** public Census matching and USDA NAIP aerial inputs have been verified for two real addresses. Exact parcel boundaries, measured geometry and zoning remain unverified; the fictional property keeps fixture labels.
+- **Not implemented:** authoritative nationwide property coverage, government-plan ingestion, live aerial measurements, verified contractor network, permit approval, production CAD, payment processing, model-native async tools or mid-turn steering.
 
 ## Current visual tier update
 

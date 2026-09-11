@@ -1,0 +1,107 @@
+1
+00:00:00,800 --> 00:00:03,060
+Home improvement starts with
+inspiration.
+
+2
+00:00:03,620 --> 00:00:07,680
+But turning an idea into something
+buildable, feasible, and fairly priced
+
+3
+00:00:07,700 --> 00:00:10,000
+is still incredibly painful.
+
+4
+00:00:11,400 --> 00:00:14,820
+DreamBid starts with your address,
+property context,
+
+5
+00:00:14,840 --> 00:00:16,320
+and photos.
+
+6
+00:00:16,740 --> 00:00:20,140
+Astra turns what you want into realistic
+project options.
+
+7
+00:00:21,180 --> 00:00:25,220
+You get three directions, from a simple
+refresh to a full
+
+8
+00:00:25,240 --> 00:00:29,460
+transformation, with preliminary
+installed price ranges for every
+
+9
+00:00:29,480 --> 00:00:30,440
+major feature.
+
+10
+00:00:31,580 --> 00:00:33,940
+Then you can actually design the
+project.
+
+11
+00:00:34,460 --> 00:00:38,460
+Add a pool, pavers, an outdoor kitchen,
+or a putting green.
+
+12
+00:00:39,180 --> 00:00:42,780
+Move and resize them, and watch the
+budget update instantly.
+
+13
+00:00:43,720 --> 00:00:46,420
+DreamBid also understands site
+constraints.
+
+14
+00:00:46,960 --> 00:00:51,140
+Put something inside a setback or
+protected zone, and it flags the issue
+
+15
+00:00:51,160 --> 00:00:53,140
+before you ever call a contractor.
+
+16
+00:00:53,640 --> 00:00:57,820
+And because Astra understands the
+project state, you
+
+17
+00:00:57,840 --> 00:01:01,787
+can simply say, “Keep the tree and get
+this under seventy-five thousand
+
+18
+00:01:01,807 --> 00:01:02,380
+dollars.”
+
+19
+00:01:04,140 --> 00:01:08,320
+Finally, DreamBid turns the design into
+a bid package and compares
+
+20
+00:01:08,340 --> 00:01:12,600
+three quotes on the same scope, exposing
+exclusions hidden behind the
+
+21
+00:01:12,620 --> 00:01:13,980
+cheapest headline price.
+
+22
+00:01:15,240 --> 00:01:16,200
+DreamBid.
+
+23
+00:01:16,580 --> 00:01:20,860
+From address, to idea, to buildable
+project, to bid.
